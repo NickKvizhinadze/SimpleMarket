@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DotNetHelpers.Extentions;
 using DotNetHelpers.Models;
 using Microsoft.EntityFrameworkCore;
 using SimpleMarket.Catalog.Api.Domain;
@@ -7,7 +8,7 @@ using SimpleMarket.Catalog.Api.Models;
 
 namespace SimpleMarket.Catalog.Api.Services;
 
-public class ProductsService: IProductsService
+public class ProductsService : IProductsService
 {
     private readonly IMapper _mapper;
     private readonly CatalogDbContext _dbContext;
@@ -17,7 +18,7 @@ public class ProductsService: IProductsService
         _mapper = mapper;
         _dbContext = dbContext;
     }
-    
+
     public async Task<Result<ProductDetailsDto>> GetProduct(Guid id, CancellationToken cancellationToken)
     {
         try
@@ -28,14 +29,18 @@ public class ProductsService: IProductsService
                 .SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
 
             if (product is null)
-                return Result.Error<ProductDetailsDto>("product_not_found", "Product not found");
+                return Result.BadRequestResult()
+                    .WithError("Product not found", "product_not_found")
+                    .WithEmptyData<ProductDetailsDto>();
 
-            return Result.Success(_mapper.Map<ProductDetailsDto>(product));
+            return Result.SuccessResult().WithData(_mapper.Map<ProductDetailsDto>(product));
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return Result.Error<ProductDetailsDto>(ex.Message);
+            return Result.InternalErrorResult()
+                .WithError(ex.Message)
+                .WithEmptyData<ProductDetailsDto>();
         }
     }
 
@@ -50,14 +55,16 @@ public class ProductsService: IProductsService
 
             var count = await _dbContext.Products.CountAsync(cancellationToken);
 
-            return Result.Success(
+            return Result.SuccessResult().WithData(
                 new ProductsListDto(_mapper.Map<List<ProductDto>>(product), count)
             );
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return Result.Error<ProductsListDto>(ex.Message);
+            return Result.InternalErrorResult()
+                .WithError(ex.Message)
+                .WithEmptyData<ProductsListDto>();
         }
     }
 
@@ -70,12 +77,14 @@ public class ProductsService: IProductsService
             await _dbContext.Products.AddAsync(product, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(product.Id);
+            return Result.SuccessResult().WithData(product.Id);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return Result.Error<Guid>(ex.Message);
+            return Result.InternalErrorResult()
+                .WithError(ex.Message)
+                .WithEmptyData<Guid>();
         }
     }
 
@@ -87,21 +96,25 @@ public class ProductsService: IProductsService
             var product = await _dbContext.Products.SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
 
             if (product is null)
-                return Result.Error<Guid>("product_not_found", "Product not found");
+                return Result.BadRequestResult()
+                    .WithError("Product not found", "product_not_found")
+                    .WithEmptyData<Guid>();
 
             _mapper.Map(model, product);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(product.Id);
+            return Result.SuccessResult().WithData(product.Id);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return Result.Error<Guid>(ex.Message);
+            return Result.InternalErrorResult()
+                .WithError(ex.Message)
+                .WithEmptyData<Guid>();
         }
     }
-    
+
     public async Task<Result> DeleteProduct(Guid id, CancellationToken cancellationToken)
     {
         try
@@ -109,17 +122,18 @@ public class ProductsService: IProductsService
             var product = await _dbContext.Products.SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
 
             if (product is null)
-                return Result.Error("product_not_found", "Product not found");
+                return Result.BadRequestResult()
+                    .WithError("Product not found", "product_not_found");
 
 
             _dbContext.Products.Remove(product);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            return Result.Success();
+            return Result.SuccessResult();
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return Result.Error(ex.Message);
+            return Result.InternalErrorResult().WithError(ex.Message);
         }
     }
 }

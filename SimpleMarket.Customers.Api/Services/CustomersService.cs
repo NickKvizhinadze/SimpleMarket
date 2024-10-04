@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DotNetHelpers.Extentions;
 using DotNetHelpers.Models;
 using Microsoft.EntityFrameworkCore;
 using SimpleMarket.Customers.Api.Domain;
@@ -25,14 +26,18 @@ public class CustomersService: ICustomerService
             var customer = await _dbContext.Customers.SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
 
             if (customer is null)
-                return Result.Error<CustomerDetailsDto>("customer_not_found", "Customer not found");
+                return Result.BadRequestResult()
+                    .WithError("Customer not found", "customer_not_found")
+                    .WithEmptyData<CustomerDetailsDto>();
 
-            return Result.Success(_mapper.Map<CustomerDetailsDto>(customer));
+            return Result.SuccessResult().WithData(_mapper.Map<CustomerDetailsDto>(customer));
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return Result.Error<CustomerDetailsDto>(ex.Message);
+            return Result.InternalErrorResult()
+                .WithError(ex.Message)
+                .WithEmptyData<CustomerDetailsDto>();
         }
     }
 
@@ -47,14 +52,16 @@ public class CustomersService: ICustomerService
 
             var count = await _dbContext.Customers.CountAsync(cancellationToken);
 
-            return Result.Success(
+            return Result.SuccessResult().WithData(
                 new CustomersListDto(_mapper.Map<List<CustomerDto>>(customer), count)
             );
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return Result.Error<CustomersListDto>(ex.Message);
+            return Result.InternalErrorResult()
+                .WithError(ex.Message)
+                .WithEmptyData<CustomersListDto>();
         }
     }
 
@@ -67,12 +74,14 @@ public class CustomersService: ICustomerService
             await _dbContext.Customers.AddAsync(customer, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(customer.Id);
+            return Result.SuccessResult().WithData(customer.Id);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return Result.Error<Guid>(ex.Message);
+            return Result.InternalErrorResult()
+                .WithError(ex.Message)
+                .WithEmptyData<Guid>();
         }
     }
 
@@ -84,18 +93,22 @@ public class CustomersService: ICustomerService
             var customer = await _dbContext.Customers.SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
 
             if (customer is null)
-                return Result.Error<Guid>("customer_not_found", "Customer not found");
+                return Result.InternalErrorResult()
+                    .WithError("Customer not found", "customer_not_found")
+                    .WithEmptyData<Guid>();
 
             _mapper.Map(model, customer);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(customer.Id);
+            return Result.SuccessResult().WithData(customer.Id);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return Result.Error<Guid>(ex.Message);
+            return Result.InternalErrorResult()
+                .WithError(ex.Message)
+                .WithEmptyData<Guid>();
         }
     }
     
@@ -106,17 +119,19 @@ public class CustomersService: ICustomerService
             var customer = await _dbContext.Customers.SingleOrDefaultAsync(c => c.Id == id, cancellationToken);
 
             if (customer is null)
-                return Result.Error("customer_not_found", "Customer not found");
+                return Result.InternalErrorResult()
+                    .WithError("Customer not found", "customer_not_found");
 
 
             _dbContext.Customers.Remove(customer);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            return Result.Success();
+            return Result.SuccessResult();
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return Result.Error(ex.Message);
+            return Result.InternalErrorResult()
+                .WithError(ex.Message);
         }
     }
 }

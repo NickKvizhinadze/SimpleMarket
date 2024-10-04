@@ -9,7 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="13.0.1" />
-        <PackageReference Include="Kvizhinadze.DotNetHelpers" Version="2.0.2" />
+        <PackageReference Include="Kvizhinadze.DotNetHelpers" Version="3.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
