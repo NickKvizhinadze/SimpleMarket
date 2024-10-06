@@ -10,4 +10,10 @@ public class CustomersDbContext : DbContext
     }
 
     public DbSet<Customer> Customers { get; set; }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.HasDefaultSchema("catalog");
+        base.OnModelCreating(modelBuilder);
+    }
 }

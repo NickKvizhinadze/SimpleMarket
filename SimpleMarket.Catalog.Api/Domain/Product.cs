@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SimpleMarket.Catalog.Api.Domain;
 
-[Table("Customers")]
+[Table("Products")]
 public class Product
 {
     [Key]

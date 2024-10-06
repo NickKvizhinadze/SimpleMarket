@@ -12,4 +12,10 @@ public class CatalogDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Brand> Brands { get; set; }
     public DbSet<Category> Categories { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.HasDefaultSchema("catalog");
+        base.OnModelCreating(modelBuilder);
+    }
 }
