@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   db:
+    container_name: "simple-market-postgresql"
     image: postgres:latest
     environment:
       - POSTGRES_USER=postgres
@@ -10,7 +11,20 @@ services:
     ports:
       - "5434:5432"
     volumes:
-      - snap_postgres:/var/lib/postgresql/data
+      - simple-market_postgres:/var/lib/postgresql/data
+
+  localstack:
+    container_name: "simple-market-localstack"
+    image: localstack/localstack
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    environment:
+      - SERVICES=s3,sqs
+      - DEBUG=1
+    volumes:
+      - "./volume:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
 volumes:
-  snap_postgres:
+  simple-market_postgres:
