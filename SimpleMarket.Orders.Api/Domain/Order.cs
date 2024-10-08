@@ -9,7 +9,7 @@ public class Order
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
-    public Guid ShippingAddressId { get; set; }
+    public int ShippingAddressId { get; set; }
     public Guid CustomerId { get; set; }
     public DateTime CreateDate { get; set; }
     public DateTime? UpdateDate { get; set; }

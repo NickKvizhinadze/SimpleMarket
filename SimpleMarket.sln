@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Customers.Api"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Api", "SimpleMarket.Orders.Api\SimpleMarket.Orders.Api.csproj", "{FCA6D0E7-FE12-4F5F-B1DD-AFFD4CB8E2B3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Catalog.Contracts", "SimpleMarket.Catalog.Contracts\SimpleMarket.Catalog.Contracts.csproj", "{2AE0E4A7-2E7A-4E17-A1B5-E6D40E701FBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,5 +31,9 @@ Global
 		{FCA6D0E7-FE12-4F5F-B1DD-AFFD4CB8E2B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCA6D0E7-FE12-4F5F-B1DD-AFFD4CB8E2B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCA6D0E7-FE12-4F5F-B1DD-AFFD4CB8E2B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AE0E4A7-2E7A-4E17-A1B5-E6D40E701FBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AE0E4A7-2E7A-4E17-A1B5-E6D40E701FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AE0E4A7-2E7A-4E17-A1B5-E6D40E701FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AE0E4A7-2E7A-4E17-A1B5-E6D40E701FBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

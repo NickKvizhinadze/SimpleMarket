@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using DotNetHelpers.Extentions;
 using DotNetHelpers.Models;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using SimpleMarket.Catalog.Api.Domain;
 using SimpleMarket.Catalog.Api.Infrastructure.Data;
 using SimpleMarket.Catalog.Api.Models;
+using SimpleMarket.Catalog.Contracts;
 
 namespace SimpleMarket.Catalog.Api.Services;
 
@@ -12,11 +14,13 @@ public class ProductsService : IProductsService
 {
     private readonly IMapper _mapper;
     private readonly CatalogDbContext _dbContext;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public ProductsService(IMapper mapper, CatalogDbContext dbContext)
+    public ProductsService(IMapper mapper, CatalogDbContext dbContext, IPublishEndpoint publishEndpoint)
     {
         _mapper = mapper;
         _dbContext = dbContext;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<Result<ProductDetailsDto>> GetProduct(Guid id, CancellationToken cancellationToken)
@@ -77,6 +81,8 @@ public class ProductsService : IProductsService
             await _dbContext.Products.AddAsync(product, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
+            await PublishUpdateEvent(product, cancellationToken);
+
             return Result.SuccessResult().WithData(product.Id);
         }
         catch (Exception ex)
@@ -103,6 +109,8 @@ public class ProductsService : IProductsService
             _mapper.Map(model, product);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
+            
+            await PublishUpdateEvent(product, cancellationToken);
 
             return Result.SuccessResult().WithData(product.Id);
         }
@@ -128,6 +136,9 @@ public class ProductsService : IProductsService
 
             _dbContext.Products.Remove(product);
             await _dbContext.SaveChangesAsync(cancellationToken);
+            
+            await PublishDeleteEvent(id, cancellationToken);
+            
             return Result.SuccessResult();
         }
         catch (Exception ex)
@@ -136,4 +147,24 @@ public class ProductsService : IProductsService
             return Result.InternalErrorResult().WithError(ex.Message);
         }
     }
+    
+    #region Private Methods
+    private async Task PublishUpdateEvent(Product product, CancellationToken cancellationToken)
+    {
+        await _publishEndpoint.Publish(new ProductUpdatedEvent
+        {
+            Id = product.Id,
+            Title = product.Title,
+            Price = product.Price
+        }, cancellationToken);
+    }
+    
+    private async Task PublishDeleteEvent(Guid id, CancellationToken cancellationToken)
+    {
+        await _publishEndpoint.Publish(new ProductDeletedEvent
+        {
+            Id = id
+        }, cancellationToken);
+    }
+    #endregion
 }

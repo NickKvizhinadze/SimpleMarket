@@ -9,6 +9,7 @@
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="13.0.1" />
         <PackageReference Include="Kvizhinadze.DotNetHelpers" Version="3.0.1" />
+        <PackageReference Include="MassTransit.AmazonSQS" Version="8.2.5" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
@@ -26,6 +27,10 @@
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimpleMarket.Catalog.Contracts\SimpleMarket.Catalog.Contracts.csproj" />
     </ItemGroup>
 
 </Project>
