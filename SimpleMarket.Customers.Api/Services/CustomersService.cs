@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using DotNetHelpers.Extentions;
 using DotNetHelpers.Models;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using SimpleMarket.Customers.Api.Domain;
 using SimpleMarket.Customers.Api.Models;
 using SimpleMarket.Customers.Api.Infrastructure.Data;
+using SimpleMarket.Customers.Contracts;
 
 namespace SimpleMarket.Customers.Api.Services;
 
@@ -12,11 +14,13 @@ public class CustomersService: ICustomerService
 {
     private readonly IMapper _mapper;
     private readonly CustomersDbContext _dbContext;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public CustomersService(IMapper mapper, CustomersDbContext dbContext)
+    public CustomersService(IMapper mapper, CustomersDbContext dbContext, IPublishEndpoint publishEndpoint)
     {
         _mapper = mapper;
         _dbContext = dbContext;
+        _publishEndpoint = publishEndpoint;
     }
     
     public async Task<Result<CustomerDetailsDto>> GetCustomer(Guid id, CancellationToken cancellationToken)
@@ -74,6 +78,8 @@ public class CustomersService: ICustomerService
             await _dbContext.Customers.AddAsync(customer, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
+            await PublishUpdatedEvent(customer, cancellationToken);
+            
             return Result.SuccessResult().WithData(customer.Id);
         }
         catch (Exception ex)
@@ -101,6 +107,8 @@ public class CustomersService: ICustomerService
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
+            await PublishUpdatedEvent(customer, cancellationToken);
+            
             return Result.SuccessResult().WithData(customer.Id);
         }
         catch (Exception ex)
@@ -134,4 +142,27 @@ public class CustomersService: ICustomerService
                 .WithError(ex.Message);
         }
     }
+    
+    #region Private Methods
+    private Task PublishUpdatedEvent(Customer customer, CancellationToken cancellationToken)
+    {
+        return _publishEndpoint.Publish(new CustomerUpdatedEvent
+        {
+            Id = customer.Id,
+            Email = customer.Email,
+            FirstName = customer.FirstName,
+            LastName = customer.LastName,
+            PersonalNumber = customer.PersonalNumber,
+            PhoneNumber = customer.PhoneNumber
+        }, cancellationToken);
+    } 
+    
+    private Task PublishDeletedEvent(Guid id, CancellationToken cancellationToken)
+    {
+        return _publishEndpoint.Publish(new CustomerDeletedEvent
+        {
+            Id = id
+        }, cancellationToken);
+    }
+    #endregion
 }

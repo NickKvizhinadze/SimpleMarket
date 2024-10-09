@@ -1,3 +1,6 @@
+using Amazon.SimpleNotificationService;
+using Amazon.SQS;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using SimpleMarket.Customers.Api.Infrastructure.Data;
 using SimpleMarket.Customers.Api.Services;
@@ -14,6 +17,26 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddDbContext<CustomersDbContext>(opts =>
     opts.UseNpgsql(configuration.GetConnectionString("CustomersConnectionString")));
 
+
+#region MassTransit
+
+builder.Services.AddMassTransit(o =>
+{
+    o.UsingAmazonSqs((context, cfg) =>
+    {
+        cfg.Host(new Uri("amazonsqs://localhost:4566"), h =>
+        {
+            h.AccessKey("simple-market");
+            h.SecretKey("Paroli1!");
+            h.Config(new AmazonSimpleNotificationServiceConfig { ServiceURL = "http://localhost:4566" });
+            h.Config(new AmazonSQSConfig { ServiceURL = "http://localhost:4566" });
+        });
+                
+        cfg.ConfigureEndpoints(context);
+    });
+});
+
+#endregion
 
 #region Register Services
 

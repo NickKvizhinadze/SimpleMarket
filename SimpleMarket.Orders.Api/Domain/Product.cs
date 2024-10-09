@@ -7,7 +7,6 @@ namespace SimpleMarket.Orders.Api.Domain;
 public class Product
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
     
     [Required]
