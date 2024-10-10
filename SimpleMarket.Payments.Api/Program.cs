@@ -2,8 +2,8 @@ using Amazon.SimpleNotificationService;
 using Amazon.SQS;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using SimpleMarket.Orders.Api.Infrastructure.Data;
-using SimpleMarket.Orders.Api.Services;
+using SimpleMarket.Payments.Api.Infrastructure.Data;
+using SimpleMarket.Payments.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-builder.Services.AddDbContext<OrdersDbContext>(opts =>
-    opts.UseNpgsql(configuration.GetConnectionString("OrdersConnectionString")));
+builder.Services.AddDbContext<PaymentsDbContext>(opts =>
+    opts.UseNpgsql(configuration.GetConnectionString("PaymentsConnectionString")));
 
 #region MassTransit
 
@@ -42,7 +42,7 @@ builder.Services.AddMassTransitHostedService();
 #endregion
 
 #region Register Services
-builder.Services.AddScoped<IOrdersService, OrdersService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 #endregion
 
 var app = builder.Build();

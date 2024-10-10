@@ -1,4 +1,4 @@
-﻿namespace SimpleMarket.Orders.Api.Domain
+﻿namespace SimpleMarket.Payments.Api.Domain
 {
     public enum PaymentStatus
     {
