@@ -3,6 +3,7 @@ using Amazon.SQS;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using SimpleMarket.Orders.Api.Infrastructure.Data;
+using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,12 +39,18 @@ builder.Services.AddMassTransit(o =>
     });
 });
 
-builder.Services.AddMassTransitHostedService();
 #endregion
 
 #region Register Services
 builder.Services.AddScoped<IOrdersService, OrdersService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 #endregion
+
+builder.Services.AddHttpClient("PaymentServiceClient", client =>
+{
+    var settings = builder.Configuration.GetSection(nameof(PaymentsSettings)).Get<PaymentsSettings>();
+    client.BaseAddress = new Uri(settings!.BaseUrl);
+});
 
 var app = builder.Build();
 

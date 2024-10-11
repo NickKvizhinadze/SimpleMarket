@@ -18,7 +18,7 @@ public class OrdersService : IOrdersService
         _dbContext = dbContext;
     }
 
-    public async Task<Result<Guid>> Checkout(RequestCheckoutDto model)
+    public async Task<Result<Order>> Checkout(RequestCheckoutDto model, CancellationToken cancellationToken)
     {
         try
         {
@@ -33,15 +33,15 @@ public class OrdersService : IOrdersService
                 ShippingAddressId = model.AddressId
             };
 
-            await _dbContext.Orders.AddAsync(order);
-            await _dbContext.SaveChangesAsync();
-            return Result.SuccessResult().WithData(order.Id);
+            await _dbContext.Orders.AddAsync(order, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return Result.SuccessResult().WithData(order);
         }
         catch (Exception ex)
         {
             return Result.InternalErrorResult()
                 .WithError(ex.Message)
-                .WithEmptyData<Guid>();
+                .WithEmptyData<Order>();
         }
     }
 }
