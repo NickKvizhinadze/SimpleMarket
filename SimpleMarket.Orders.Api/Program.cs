@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using SimpleMarket.Orders.Api.Diagnostics;
 using SimpleMarket.Orders.Api.Infrastructure.Data;
 using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Api.Services;
@@ -54,19 +55,7 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 #region OpenTelemetry
 
-builder.Services.AddOpenTelemetry()
-    .ConfigureResource(resource =>
-        resource.AddService("SimpleMarket.Orders.Api")
-            .AddAttributes(new[]
-            {
-                new KeyValuePair<string, object>("service.version",
-                    Assembly.GetExecutingAssembly().GetName().Version!.ToString()),
-            })
-    )
-    .WithTracing(tracing =>
-        tracing.AddAspNetCoreInstrumentation()
-            .AddNpgsql()
-            .AddConsoleExporter());
+builder.AddOpenTelemetry();
 
 #endregion
 

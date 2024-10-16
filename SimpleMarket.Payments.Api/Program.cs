@@ -2,6 +2,7 @@ using Amazon.SimpleNotificationService;
 using Amazon.SQS;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using SimpleMarket.Payments.Api.Diagnostics;
 using SimpleMarket.Payments.Api.Infrastructure.Data;
 using SimpleMarket.Payments.Api.Services;
 
@@ -38,7 +39,11 @@ builder.Services.AddMassTransit(o =>
     });
 });
 
-builder.Services.AddMassTransitHostedService();
+#endregion
+
+#region Open telemetry
+
+builder.AddOpenTelemetry();
 #endregion
 
 #region Register Services
