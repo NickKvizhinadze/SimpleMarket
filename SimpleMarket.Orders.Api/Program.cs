@@ -1,10 +1,15 @@
+using System.Reflection;
 using Amazon.SimpleNotificationService;
 using Amazon.SQS;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using SimpleMarket.Orders.Api.Infrastructure.Data;
 using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Api.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,10 +28,9 @@ builder.Services.AddDbContext<OrdersDbContext>(opts =>
 builder.Services.AddMassTransit(o =>
 {
     o.AddConsumers(typeof(Program).Assembly);
-    
+
     o.UsingAmazonSqs((context, cfg) =>
     {
-       
         cfg.Host(new Uri("amazonsqs://localhost:4566"), h =>
         {
             h.AccessKey("simple-market");
@@ -34,7 +38,7 @@ builder.Services.AddMassTransit(o =>
             h.Config(new AmazonSimpleNotificationServiceConfig { ServiceURL = "http://localhost:4566" });
             h.Config(new AmazonSQSConfig { ServiceURL = "http://localhost:4566" });
         });
-                
+
         cfg.ConfigureEndpoints(context);
     });
 });
@@ -42,8 +46,28 @@ builder.Services.AddMassTransit(o =>
 #endregion
 
 #region Register Services
+
 builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+#endregion
+
+#region OpenTelemetry
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource =>
+        resource.AddService("SimpleMarket.Orders.Api")
+            .AddAttributes(new[]
+            {
+                new KeyValuePair<string, object>("service.version",
+                    Assembly.GetExecutingAssembly().GetName().Version!.ToString()),
+            })
+    )
+    .WithTracing(tracing =>
+        tracing.AddAspNetCoreInstrumentation()
+            .AddNpgsql()
+            .AddConsoleExporter());
+
 #endregion
 
 builder.Services.AddHttpClient("PaymentServiceClient", client =>
@@ -62,5 +86,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();

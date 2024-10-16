@@ -35,4 +35,12 @@ public class OrdersController : ControllerBase
 
         return Ok();
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Get(CancellationToken cancellationToken)
+    {
+        var orders = await _service.GetOrders(cancellationToken);
+
+        return Ok(orders);
+    }
 }

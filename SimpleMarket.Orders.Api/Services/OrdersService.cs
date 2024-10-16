@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DotNetHelpers.Extentions;
 using DotNetHelpers.Models;
+using Microsoft.EntityFrameworkCore;
 using SimpleMarket.Orders.Api.Domain;
 using SimpleMarket.Orders.Api.Infrastructure.Data;
 using SimpleMarket.Orders.Api.Models;
@@ -43,5 +44,10 @@ public class OrdersService : IOrdersService
                 .WithError(ex.Message)
                 .WithEmptyData<Order>();
         }
+    }
+
+    public Task<List<Order>> GetOrders(CancellationToken cancellationToken)
+    {
+        return _dbContext.Orders.ToListAsync(cancellationToken);
     }
 }

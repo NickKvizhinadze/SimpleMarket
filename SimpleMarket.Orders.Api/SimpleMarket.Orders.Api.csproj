@@ -11,6 +11,10 @@
         <PackageReference Include="Kvizhinadze.DotNetHelpers" Version="3.0.1" />
         <PackageReference Include="MassTransit.AmazonSQS" Version="8.2.5" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
+        <PackageReference Include="Npgsql.OpenTelemetry" Version="8.0.5" />
+        <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.9.0" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 

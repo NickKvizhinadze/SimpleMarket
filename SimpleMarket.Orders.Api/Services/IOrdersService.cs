@@ -7,4 +7,5 @@ namespace SimpleMarket.Orders.Api.Services;
 public interface IOrdersService
 {
     Task<Result<Order>> Checkout(RequestCheckoutDto model, CancellationToken cancellationToken);
+    Task<List<Order>> GetOrders(CancellationToken cancellationToken);
 }
