@@ -3,8 +3,9 @@ using DotNetHelpers.Extentions;
 using DotNetHelpers.Models;
 using Microsoft.EntityFrameworkCore;
 using SimpleMarket.Orders.Api.Domain;
-using SimpleMarket.Orders.Api.Infrastructure.Data;
 using SimpleMarket.Orders.Api.Models;
+using SimpleMarket.Orders.Api.Diagnostics;
+using SimpleMarket.Orders.Api.Infrastructure.Data;
 
 namespace SimpleMarket.Orders.Api.Services;
 
@@ -36,6 +37,9 @@ public class OrdersService : IOrdersService
 
             await _dbContext.Orders.AddAsync(order, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
+            
+            ApplicationDiagnostics.OrdersCreatedCounter.Add(1);
+            
             return Result.SuccessResult().WithData(order);
         }
         catch (Exception ex)

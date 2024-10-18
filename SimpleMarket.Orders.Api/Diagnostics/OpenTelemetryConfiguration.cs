@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Npgsql;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
 using SimpleMarket.Orders.Api.Models;
@@ -32,7 +33,12 @@ public static class OpenTelemetryConfiguration
                     .AddOtlpExporter(options =>
                         options.Endpoint = new Uri(settings!.JaegerUrl)
                     )
-            );
+            )
+            .WithMetrics(metrics => 
+                metrics
+                    .AddMeter(ApplicationDiagnostics.Meter.Name)
+                    .AddPrometheusExporter()
+                );
 
         return builder;
     }
