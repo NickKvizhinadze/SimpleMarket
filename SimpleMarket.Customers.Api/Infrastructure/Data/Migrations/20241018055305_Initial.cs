@@ -11,8 +11,12 @@ namespace SimpleMarket.Customers.Api.Infrastructure.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "customers");
+
             migrationBuilder.CreateTable(
                 name: "Customers",
+                schema: "customers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -36,7 +40,8 @@ namespace SimpleMarket.Customers.Api.Infrastructure.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Customers",
+                schema: "customers");
         }
     }
 }

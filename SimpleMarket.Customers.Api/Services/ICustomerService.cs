@@ -9,5 +9,5 @@ public interface ICustomerService
     Task<Result<CustomerDetailsDto>> GetCustomer(Guid id, CancellationToken cancellationToken);
     Task<Result<Guid>> CreateCustomer(CustomerCreateDto model, CancellationToken cancellationToken);
     Task<Result<Guid>> UpdateCustomer(Guid id, CustomerUpdateDto model, CancellationToken cancellationToken);
-    Task<Result> DeleteCustomers(Guid id, CancellationToken cancellationToken);
+    Task<Result> DeleteCustomer(Guid id, CancellationToken cancellationToken);
 }

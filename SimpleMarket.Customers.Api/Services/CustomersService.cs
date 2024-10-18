@@ -120,7 +120,7 @@ public class CustomersService: ICustomerService
         }
     }
     
-    public async Task<Result> DeleteCustomers(Guid id, CancellationToken cancellationToken)
+    public async Task<Result> DeleteCustomer(Guid id, CancellationToken cancellationToken)
     {
         try
         {

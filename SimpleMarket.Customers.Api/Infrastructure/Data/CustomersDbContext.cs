@@ -13,7 +13,7 @@ public class CustomersDbContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("catalog");
+        modelBuilder.HasDefaultSchema("customers");
         base.OnModelCreating(modelBuilder);
     }
 }

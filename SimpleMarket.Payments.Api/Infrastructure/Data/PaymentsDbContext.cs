@@ -15,7 +15,7 @@ public class PaymentsDbContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("orders");
+        modelBuilder.HasDefaultSchema("payments");
         base.OnModelCreating(modelBuilder);
     }
 }
