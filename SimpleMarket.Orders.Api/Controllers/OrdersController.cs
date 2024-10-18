@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Api.Services;
+using SimpleMarket.Orders.Api.Diagnostics.Extensions;
 
 namespace SimpleMarket.Orders.Api.Controllers;
 
@@ -19,11 +21,14 @@ public class OrdersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] RequestCheckoutDto model, CancellationToken cancellationToken)
     {
+        Activity.Current.EnrichWithOrderRequestData(model);
         var result = await _service.Checkout(model, cancellationToken);
 
         if (!result.Succeeded)
             return BadRequest(result.Errors);
 
+        Activity.Current.EnrichWithOrderData(result.Data!);
+        
         await _paymentService.PayOrder(new PayOrderDto
             {
                 CorrelationId = result.Data!.Id,
