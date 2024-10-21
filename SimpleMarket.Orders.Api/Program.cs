@@ -1,15 +1,11 @@
-using System.Reflection;
 using Amazon.SimpleNotificationService;
 using Amazon.SQS;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
-using SimpleMarket.Orders.Api.Diagnostics;
-using SimpleMarket.Orders.Api.Infrastructure.Data;
 using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Api.Services;
+using SimpleMarket.Orders.Api.Diagnostics;
+using SimpleMarket.Orders.Api.Infrastructure.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,10 +70,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseOpenTelemetryPrometheusScrapingEndpoint();
 
 app.UseHttpsRedirection();
+app.UseOpenTelemetryPrometheusScrapingEndpoint();
 
+app.MapPrometheusScrapingEndpoint();
 app.MapControllers();
 
 app.Run();
