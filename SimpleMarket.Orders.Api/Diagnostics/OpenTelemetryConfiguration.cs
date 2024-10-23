@@ -36,9 +36,12 @@ public static class OpenTelemetryConfiguration
             )
             .WithMetrics(metrics => 
                 metrics
-                    .AddMeter(ApplicationDiagnostics.Meter.Name)
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
+                    .AddMeter("Microsoft.AspNetCore.Hosting")
+                    .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
+                    .AddMeter(ApplicationDiagnostics.Meter.Name)
+                    .AddConsoleExporter()
                     .AddPrometheusExporter()
                 );
 

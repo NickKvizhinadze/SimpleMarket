@@ -4,6 +4,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
 		prometheus.yml = prometheus.yml
+		grafana-datasources.yml = grafana-datasources.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Catalog.Api", "SimpleMarket.Catalog.Api\SimpleMarket.Catalog.Api.csproj", "{E9CCFB70-3DB3-48E7-9B2B-1F7A36454DD6}"
