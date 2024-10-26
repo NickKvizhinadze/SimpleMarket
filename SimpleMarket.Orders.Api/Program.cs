@@ -72,9 +72,7 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
-app.UseOpenTelemetryPrometheusScrapingEndpoint();
 
-app.MapPrometheusScrapingEndpoint();
 app.MapControllers();
 
 app.Run();

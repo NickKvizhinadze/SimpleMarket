@@ -1,0 +1,40 @@
+﻿extensions:
+    health_check:
+
+receivers:
+    otlp:
+        protocols:
+            grpc:
+            http:
+
+processors:    
+    batch:
+
+exporters:
+    debug:
+    otlp/jaeger:
+        endpoint: "${JAEGER_ENDPOINT}"
+        tls:
+            insecure: true
+    prometheus:
+        endpoint: "0.0.0.0:8889"
+
+service:
+    pipelines:
+        traces:
+            receivers:
+                - otlp
+            processors: [ batch ]
+            exporters:
+                - debug
+                - otlp/jaeger
+        metrics:
+            receivers:
+                - otlp
+            processors: [ batch ]
+            exporters:
+                - debug
+                - prometheus
+    
+    extensions:
+        - health_check

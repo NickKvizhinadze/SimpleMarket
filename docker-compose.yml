@@ -1,67 +1,82 @@
 services:
-  db:
-    container_name: "simple-market-postgresql"
-    image: postgres:latest
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=Paroli1!
-      - POSTGRES_DB=postgres
-    ports:
-      - "5434:5432"
-    volumes:
-      - simple-market_postgres:/var/lib/postgresql/data
-
-  #local stack
-  localstack:
-    container_name: "simple-market-localstack"
-    image: localstack/localstack
-    ports:
-      - "127.0.0.1:4566:4566"            # LocalStack Gateway
-      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
-    environment:
-      - SERVICES=s3,sqs,sns
-      - DEBUG=1
-    volumes:
-      - "./volume:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-   
-  # Jaeger service
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    container_name: jaeger
-    ports:
-      - "6831:6831/udp"  # Jaeger agent (UDP port)
-      - "16686:16686"    # Jaeger UI
-      - "14268:14268"    # Jaeger Collector HTTP (for trace submission)
-      - "14250:14250"    # Jaeger gRPC Collector
-      - "14269:14269"    # Collector admin
-      - "9411:9411"      # Zipkin compatible service 
-      - "4317:4317"       # OTLP gRPC
-      - "4318:4318"      # OTLP HTTP (default OpenTelemetry port)
+    db:
+        container_name: "simple-market-postgresql"
+        image: postgres:latest
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=Paroli1!
+            - POSTGRES_DB=postgres
+        ports:
+            - "5434:5432"
+        volumes:
+            - simple-market_postgres:/var/lib/postgresql/data
     
-  # Prometheus
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    ports:
-      - "9090:9090"   # Prometheus UI
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
+    #local stack
+    localstack:
+        container_name: "simple-market-localstack"
+        image: localstack/localstack
+        ports:
+            - "127.0.0.1:4566:4566"            # LocalStack Gateway
+            - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+        environment:
+            - SERVICES=s3,sqs,sns
+            - DEBUG=1
+        volumes:
+            - "./volume:/var/lib/localstack"
+            - "/var/run/docker.sock:/var/run/docker.sock"
+    
+    # Jaeger service
+    jaeger:
+        image: jaegertracing/all-in-one:latest
+        container_name: jaeger
+        ports:
+            - "6831:6831/udp"  # Jaeger agent (UDP port)
+            - "16686:16686"    # Jaeger UI
+            - "14268:14268"    # Jaeger Collector HTTP (for trace submission)
+            - "14250:14250"    # Jaeger gRPC Collector
+            - "14269:14269"    # Collector admin
+            - "9411:9411"      # Zipkin compatible service 
+    
+    # Prometheus
+    prometheus:
+        image: prom/prometheus:latest
+        container_name: prometheus
+        ports:
+            - "9090:9090"   # Prometheus UI
+        volumes:
+            - ./prometheus.yml:/etc/prometheus/prometheus.yml
+        command:
+            - '--config.file=/etc/prometheus/prometheus.yml'
+    
+    # Grafana
+    grafana:
+        image: grafana/grafana:latest
+        container_name: grafana
+        ports:
+            - "3000:3000"   # Grafana UI
+        environment:
+            - GF_AUTH_ANONYMOUS_ENABLED=true
+            - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+        volumes:
+            - ./grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+    
+    # OpenTelemetry Collector
+    otel-collector:
+        image: otel/opentelemetry-collector:latest
+        container_name: otel-collector
+        environment:
+            JAEGER_ENDPOINT: "jaeger:4317"
+        ports:
+            - "8889:8889"   # Prometheus metrics exporter (scrape endpoint)
+            - "13133:13133" # health_check extension
+            - "4317:4317"   # OTLP Receiver
+        volumes:
+            - ./otel-collector-config.yml:/etc/otel-collector-config.yml
+            - ./log:/log/otel
+        command: [ "--config=/etc/otel-collector-config.yml" ]
+        depends_on:
+            - jaeger
+            - prometheus
 
-  # Grafana
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - "3000:3000"   # Grafana UI
-    environment:
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-    volumes:
-      - ./grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
-        
-        
 volumes:
-  simple-market_postgres:
+    simple-market_postgres:

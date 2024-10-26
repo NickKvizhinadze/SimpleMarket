@@ -31,7 +31,7 @@ public static class OpenTelemetryConfiguration
                     .AddNpgsql()
                     .AddConsoleExporter()
                     .AddOtlpExporter(options =>
-                        options.Endpoint = new Uri(settings!.JaegerUrl)
+                        options.Endpoint = new Uri(settings!.OtlpEndpoint)
                     )
             )
             .WithMetrics(metrics => 
@@ -42,7 +42,9 @@ public static class OpenTelemetryConfiguration
                     .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
                     .AddMeter(ApplicationDiagnostics.Meter.Name)
                     .AddConsoleExporter()
-                    .AddPrometheusExporter()
+                    .AddOtlpExporter(options =>
+                        options.Endpoint = new Uri(settings!.OtlpEndpoint)
+                    )
                 );
 
         return builder;
