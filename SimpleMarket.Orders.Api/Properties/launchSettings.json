@@ -1,13 +1,41 @@
-{
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:58011",
+      "sslPort": 44384
+    }
+  },
   "profiles": {
-    "SimpleMarket.Orders.Api": {
+    "http": {
       "commandName": "Project",
+      "dotnetRunMessages": true,
       "launchBrowser": false,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5222",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:59476;http://localhost:5222",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:59476;http://localhost:59479"
+      }
     }
   }
 }
