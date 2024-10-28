@@ -70,6 +70,7 @@ services:
             - "8889:8889"   # Prometheus metrics exporter (scrape endpoint)
             - "13133:13133" # health_check extension
             - "4317:4317"   # OTLP Receiver
+            - "55680:55680" #  http Receiver
         volumes:
             - ./otel-collector-config.yml:/etc/otel-collector-config.yml
             - ./log:/log/otel
