@@ -59,6 +59,7 @@ services:
             - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
         volumes:
             - ./grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+            - grafana-storage:/var/lib/grafana  # Persistent storage for Grafana
     
     # OpenTelemetry Collector
     otel-collector:
@@ -81,3 +82,4 @@ services:
 
 volumes:
     simple-market_postgres:
+    grafana-storage:

@@ -9,8 +9,17 @@ receivers:
             http: 
                 endpoint: "0.0.0.0:55680"
 
-processors:    
+processors:
+    memory_limiter:
+        check_interval: 1s
+        limit_percentage: 50
+        spike_limit_percentage: 30        
     batch:
+    attributes:
+        actions:
+            - key:  region
+              value:  west           
+              action:  insert
 
 exporters:
     debug:
@@ -26,14 +35,14 @@ service:
         traces:
             receivers:
                 - otlp
-            processors: [ batch ]
+            processors: [ memory_limiter, attributes, batch ]
             exporters:
                 - debug
                 - otlp/jaeger
         metrics:
             receivers:
                 - otlp
-            processors: [ batch ]
+            processors: [ memory_limiter, batch ]
             exporters:
                 - debug
                 - prometheus
