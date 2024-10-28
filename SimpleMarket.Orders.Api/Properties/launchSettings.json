@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "SimpleMarket.Orders.Api": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:59476;http://localhost:59479"
+    }
+  }
+}
