@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using SimpleMarket.Payments.Api.Models;
@@ -28,7 +29,12 @@ public static class OpenTelemetryConfiguration
                     .AddOtlpExporter(options =>
                         options.Endpoint = new Uri(settings!.OtlpEndpoint)
                     )
-            );
+            )
+            .WithLogging(logging => 
+                logging.AddOtlpExporter(options =>
+                {
+                    options.Endpoint = new Uri(settings!.OtlpEndpoint);
+                }));
 
         return builder;
     }

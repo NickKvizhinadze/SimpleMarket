@@ -63,7 +63,7 @@ services:
     
     # OpenTelemetry Collector
     otel-collector:
-        image: otel/opentelemetry-collector:latest
+        image: otel/opentelemetry-collector-contrib:latest
         container_name: otel-collector
         environment:
             JAEGER_ENDPOINT: "jaeger:4317"
@@ -79,7 +79,15 @@ services:
         depends_on:
             - jaeger
             - prometheus
+            - loki
 
+    # Loki
+    loki:
+        image: grafana/loki:latest
+        ports:
+            - "3100:3100"
+        command: -config.file=/etc/loki/local-config.yaml
+        
 volumes:
     simple-market_postgres:
     grafana-storage:
