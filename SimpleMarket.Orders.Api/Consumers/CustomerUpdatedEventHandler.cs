@@ -21,6 +21,7 @@ public class CustomerUpdatedEventHandler : IConsumer<CustomerUpdatedEvent>
     {
         _logger.LogInformation(JsonSerializer.Serialize(context.Message));
 
+        
         var message = context.Message;
         var customer = await _dbContext.Customers.FindAsync(message.Id);
 

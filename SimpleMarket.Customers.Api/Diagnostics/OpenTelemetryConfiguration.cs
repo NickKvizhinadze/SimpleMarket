@@ -1,21 +1,20 @@
 ﻿using System.Reflection;
 using MassTransit.Logging;
-using MassTransit.Monitoring;
 using Npgsql;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
-using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
-using SimpleMarket.Orders.Api.Models;
+using OpenTelemetry.Trace;
+using SimpleMarket.Customers.Api.Models;
 
-namespace SimpleMarket.Orders.Api.Diagnostics;
+namespace SimpleMarket.Customers.Api.Diagnostics;
 
 public static class OpenTelemetryConfiguration
 {
     public static WebApplicationBuilder AddOpenTelemetry(this WebApplicationBuilder builder)
     {
         var settings = builder.Configuration.GetSection(nameof(OpenTelemetrySettings)).Get<OpenTelemetrySettings>();
-        var serviceName = "SimpleMarket.Orders.Api";
+        var serviceName = "SimpleMarket.Customers.Api";
 
         builder.Services.AddOpenTelemetry()
             .ConfigureResource(resource =>
@@ -44,18 +43,16 @@ public static class OpenTelemetryConfiguration
                     .AddHttpClientInstrumentation()
                     .AddMeter("Microsoft.AspNetCore.Hosting")
                     .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
-                    .AddMeter(ApplicationDiagnostics.Meter.Name)
                     .AddConsoleExporter()
                     .AddOtlpExporter(options =>
                         options.Endpoint = new Uri(settings!.OtlpEndpoint)
                     )
-                )
+            )
             .WithLogging(logging => 
-                logging.AddOtlpExporter(options => options.Endpoint = new Uri(settings!.OtlpEndpoint)),
-                options =>
+                logging.AddOtlpExporter(options =>
                 {
-                    options.IncludeFormattedMessage = true;
-                });
+                    options.Endpoint = new Uri(settings!.OtlpEndpoint);
+                }));
 
         return builder;
     }

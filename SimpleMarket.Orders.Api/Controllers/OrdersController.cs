@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry;
 using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Api.Services;
 using SimpleMarket.Orders.Api.Diagnostics.Extensions;
@@ -27,14 +28,16 @@ public class OrdersController : ControllerBase
         if (!result.Succeeded)
             return BadRequest(result.Errors);
 
-        Activity.Current.EnrichWithOrderData(result.Data!);
+        var orderData = result.Data;
+        Activity.Current.EnrichWithOrderData(orderData!);
+        Baggage.SetBaggage("order.id", orderData!.Id.ToString());
         
         await _paymentService.PayOrder(new PayOrderDto
             {
-                CorrelationId = result.Data!.Id,
+                CorrelationId = orderData!.Id,
                 CustomerId = model.CustomerId,
                 PaymentMethod = model.PaymentMethod,
-                Amount = result.Data.Amount
+                Amount = orderData.Amount
             },
             cancellationToken);
 

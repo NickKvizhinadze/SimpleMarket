@@ -133,6 +133,8 @@ public class CustomersService: ICustomerService
 
             _dbContext.Customers.Remove(customer);
             await _dbContext.SaveChangesAsync(cancellationToken);
+            
+            await PublishDeletedEvent(id, cancellationToken);
             return Result.SuccessResult();
         }
         catch (Exception ex)

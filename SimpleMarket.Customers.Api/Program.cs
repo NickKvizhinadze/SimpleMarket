@@ -2,6 +2,7 @@ using Amazon.SimpleNotificationService;
 using Amazon.SQS;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using SimpleMarket.Customers.Api.Diagnostics;
 using SimpleMarket.Customers.Api.Infrastructure.Data;
 using SimpleMarket.Customers.Api.Services;
 
@@ -41,6 +42,12 @@ builder.Services.AddMassTransit(o =>
 #region Register Services
 
 builder.Services.AddScoped<ICustomerService, CustomersService>();
+#endregion
+
+#region OpenTelemetry
+
+builder.AddOpenTelemetry();
+
 #endregion
 
 var app = builder.Build();
