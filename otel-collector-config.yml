@@ -20,6 +20,20 @@ processors:
             - key:  region
               value:  west           
               action:  insert
+    ## https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/tailsamplingprocessor/README.md
+    # Excluding health checks from traces
+    tail_sampling:
+        decision_wait: 10s
+        expected_new_traces_per_sec: 10
+        policies:
+            - name: string_attribute_policy
+              type: string_attribute
+              string_attribute:
+                  key: http.route
+                  values:
+                      - ^\/healthz$
+                  enabled_regex_matching: true
+                  invert_match: true
 
 exporters:
     debug:
@@ -39,7 +53,7 @@ service:
         traces:
             receivers:
                 - otlp
-            processors: [ memory_limiter, attributes, batch ]
+            processors: [ memory_limiter, attributes, tail_sampling, batch ]
             exporters:
                 - debug
                 - otlp/jaeger
