@@ -2,6 +2,7 @@ using Amazon.SimpleNotificationService;
 using Amazon.SQS;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using SimpleMarket.Catalog.Api.Extensions;
 using SimpleMarket.Catalog.Api.Infrastructure.Data;
 using SimpleMarket.Catalog.Api.Services;
 
@@ -48,6 +49,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.Migrate();
 }
 
 app.UseHttpsRedirection();

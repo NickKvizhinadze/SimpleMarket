@@ -1,11 +1,11 @@
-using Amazon.SimpleNotificationService;
-using Amazon.SQS;
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using SimpleMarket.Payments.Api.Diagnostics;
-using SimpleMarket.Payments.Api.Extensions;
-using SimpleMarket.Payments.Api.Infrastructure.Data;
-using SimpleMarket.Payments.Api.Services;
+using MassTransit;
+using Amazon.SQS;
+using Amazon.SimpleNotificationService;
+using SimpleMarket.Carrier.Api.Diagnostics;
+using SimpleMarket.Carrier.Persistence.Data;
+using SimpleMarket.Carrier.Persistence.Extensions;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,20 +14,18 @@ var configuration = builder.Configuration;
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-builder.Services.AddDbContext<PaymentsDbContext>(opts =>
-    opts.UseNpgsql(configuration.GetConnectionString("PaymentsConnectionString")));
+builder.Services.AddDbContext<CarrierDbContext>(opts =>
+    opts.UseNpgsql(configuration.GetConnectionString("CarrierConnectionString")));
 
 #region MassTransit
 
 builder.Services.AddMassTransit(o =>
 {
     o.AddConsumers(typeof(Program).Assembly);
-    
+
     o.UsingAmazonSqs((context, cfg) =>
     {
-       
         cfg.Host(new Uri("amazonsqs://localhost:4566"), h =>
         {
             h.AccessKey("simple-market");
@@ -35,20 +33,21 @@ builder.Services.AddMassTransit(o =>
             h.Config(new AmazonSimpleNotificationServiceConfig { ServiceURL = "http://localhost:4566" });
             h.Config(new AmazonSQSConfig { ServiceURL = "http://localhost:4566" });
         });
-                
+
         cfg.ConfigureEndpoints(context);
     });
 });
 
 #endregion
 
-#region Open telemetry
+#region Register Services
 
-builder.AddOpenTelemetry();
 #endregion
 
-#region Register Services
-builder.Services.AddScoped<IPaymentService, PaymentService>();
+#region OpenTelemetry
+
+builder.AddOpenTelemetry();
+
 #endregion
 
 var app = builder.Build();
@@ -60,6 +59,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.Migrate();
 }
+
 
 app.UseHttpsRedirection();
 

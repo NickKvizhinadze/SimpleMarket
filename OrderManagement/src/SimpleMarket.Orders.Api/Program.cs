@@ -1,11 +1,13 @@
-using Amazon.SimpleNotificationService;
-using Amazon.SQS;
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using SimpleMarket.Payments.Api.Diagnostics;
-using SimpleMarket.Payments.Api.Extensions;
-using SimpleMarket.Payments.Api.Infrastructure.Data;
-using SimpleMarket.Payments.Api.Services;
+using MassTransit;
+using Amazon.SQS;
+using Amazon.SimpleNotificationService;
+using SimpleMarket.Orders.Api.Models;
+using SimpleMarket.Orders.Api.Services;
+using SimpleMarket.Orders.Api.Diagnostics;
+using SimpleMarket.Orders.Persistence.Data;
+using SimpleMarket.Orders.Persistence.Extensions;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,18 +18,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-builder.Services.AddDbContext<PaymentsDbContext>(opts =>
-    opts.UseNpgsql(configuration.GetConnectionString("PaymentsConnectionString")));
+builder.Services.AddDbContext<OrdersDbContext>(opts =>
+    opts.UseNpgsql(configuration.GetConnectionString("OrdersConnectionString")));
 
 #region MassTransit
 
 builder.Services.AddMassTransit(o =>
 {
     o.AddConsumers(typeof(Program).Assembly);
-    
+
     o.UsingAmazonSqs((context, cfg) =>
     {
-       
         cfg.Host(new Uri("amazonsqs://localhost:4566"), h =>
         {
             h.AccessKey("simple-market");
@@ -35,21 +36,31 @@ builder.Services.AddMassTransit(o =>
             h.Config(new AmazonSimpleNotificationServiceConfig { ServiceURL = "http://localhost:4566" });
             h.Config(new AmazonSQSConfig { ServiceURL = "http://localhost:4566" });
         });
-                
+
         cfg.ConfigureEndpoints(context);
     });
 });
 
 #endregion
 
-#region Open telemetry
+#region Register Services
+
+builder.Services.AddScoped<IOrdersService, OrdersService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+#endregion
+
+#region OpenTelemetry
 
 builder.AddOpenTelemetry();
+
 #endregion
 
-#region Register Services
-builder.Services.AddScoped<IPaymentService, PaymentService>();
-#endregion
+builder.Services.AddHttpClient("PaymentServiceClient", client =>
+{
+    var settings = builder.Configuration.GetSection(nameof(PaymentsSettings)).Get<PaymentsSettings>();
+    client.BaseAddress = new Uri(settings!.BaseUrl);
+});
 
 var app = builder.Build();
 
@@ -60,6 +71,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.Migrate();
 }
+
 
 app.UseHttpsRedirection();
 
