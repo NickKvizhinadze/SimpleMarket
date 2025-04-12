@@ -30,17 +30,9 @@ public class OrdersController : ControllerBase
 
         var orderData = result.Data;
         Activity.Current.EnrichWithOrderData(orderData!);
+        //TODO: check if baggage goes in SQS
         Baggage.SetBaggage("order.id", orderData!.Id.ToString());
         
-        await _paymentService.PayOrder(new PayOrderDto
-            {
-                CorrelationId = orderData!.Id,
-                CustomerId = model.CustomerId,
-                PaymentMethod = model.PaymentMethod,
-                Amount = orderData.Amount
-            },
-            cancellationToken);
-
         return Ok();
     }
 

@@ -18,23 +18,19 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
             {
-                // services.AddDbContext<OrderContext>(options =>
-                // {
-                //     options.UseSqlServer(hostContext.Configuration.GetConnectionString("DefaultConnection"));
-                //     options.EnableSensitiveDataLogging(true);
-                // });
-
-
-                // services.AddScoped<IOrderRepository, OrderRepository>();
-                // services.AddScoped<IOrderService, OrderService>();
-                // services.AddAutoMapper(typeof(OrderProfileMapping));
-
                 services.AddMassTransit(o =>
                 {
+                    o.SetEntityFrameworkSagaRepositoryProvider(r =>
+                    {
+                        r.ExistingDbContext<OrdersDbContext>();
+                        r.UseSqlServer();
+                    });
+                    
                     o.AddSagaStateMachine<OrderStateMachine, OrderStateInstance>()
                         .EntityFrameworkRepository(r =>
                         {
                             r.ExistingDbContext<OrdersDbContext>();
+                            r.ConcurrencyMode = ConcurrencyMode.Optimistic;
                             r.UsePostgres();
                         });
 

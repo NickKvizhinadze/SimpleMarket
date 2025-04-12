@@ -16,6 +16,8 @@ public class PaymentsController : ControllerBase
         _service = service;
     }
 
+    
+    //TODO: remove this
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePaymentDto model, CancellationToken cancellationToken)
     {

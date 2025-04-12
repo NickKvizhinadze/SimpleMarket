@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
@@ -37,6 +37,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\OrderManagement\src\SimpleMarket.Orders.Contracts\SimpleMarket.Orders.Contracts.csproj" />
       <ProjectReference Include="..\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj" />
     </ItemGroup>
 

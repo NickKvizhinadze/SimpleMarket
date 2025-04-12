@@ -32,7 +32,7 @@ public static class OpenTelemetryConfiguration
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddNpgsql()
-                    .AddMassTransitInstrumentation()
+                    .AddSource(DiagnosticHeaders.DefaultListenerName)
                     .AddConsoleExporter()
                     .AddOtlpExporter(options =>
                         options.Endpoint = new Uri(settings!.OtlpEndpoint)
