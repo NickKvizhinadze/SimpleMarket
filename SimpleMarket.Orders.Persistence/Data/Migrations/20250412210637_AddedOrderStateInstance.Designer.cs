@@ -12,7 +12,7 @@ using SimpleMarket.Orders.Persistence.Data;
 namespace SimpleMarket.Orders.Persistence.Data.Migrations
 {
     [DbContext(typeof(OrdersDbContext))]
-    [Migration("20250410155915_AddedOrderStateInstance")]
+    [Migration("20250412210637_AddedOrderStateInstance")]
     partial class AddedOrderStateInstance
     {
         /// <inheritdoc />
@@ -173,11 +173,9 @@ namespace SimpleMarket.Orders.Persistence.Data.Migrations
 
             modelBuilder.Entity("SimpleMarket.Orders.Persistence.Saga.OrderStateInstance", b =>
                 {
-                    b.Property<int>("OrderId")
+                    b.Property<Guid>("OrderId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderId"));
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("CorrelationId")
                         .HasColumnType("uuid");
@@ -190,10 +188,9 @@ namespace SimpleMarket.Orders.Persistence.Data.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
+                    b.Property<Guid>("CustomerId")
                         .HasMaxLength(240)
-                        .HasColumnType("character varying(240)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("PaymentAccountId")
                         .IsRequired()

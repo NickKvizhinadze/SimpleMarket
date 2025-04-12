@@ -33,7 +33,13 @@ public class OrdersService : IOrdersService
                 PaymentMethod = model.PaymentMethod,
                 ShippingAmount = 0, // TODO: calculate by address
                 CreateDate = DateTime.UtcNow,
-                ShippingAddressId = model.AddressId
+                ShippingAddressId = model.AddressId,
+                OrderItems = model.Products?.Select(p => new OrderItem
+                {
+                    ProductId = p.Id,
+                    Quantity = p.Quantity,
+                    Price = p.Price
+                }).ToList()?? []
             };
 
             await _dbContext.Orders.AddAsync(order, cancellationToken);
@@ -43,6 +49,7 @@ public class OrdersService : IOrdersService
             {
                 CreatedAt = order.CreateDate,
                 OrderId = order.Id,
+                CustomerId = order.CustomerId,
                 TotalAmount = order.OrderItems.Sum(x => x.Price * x.Quantity)
             }, cancellationToken);
             

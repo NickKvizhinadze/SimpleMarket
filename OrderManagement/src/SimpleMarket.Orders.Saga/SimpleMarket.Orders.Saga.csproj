@@ -8,16 +8,38 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MassTransit" Version="8.4.0" />
-      <PackageReference Include="MassTransit.AmazonSQS" Version="8.4.0" />
-      <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.4.0" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
+        <PackageReference Include="MassTransit" Version="8.4.0"/>
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0"/>
+        <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.4.0"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\SimpleMarket.Orders.Persistence\SimpleMarket.Orders.Persistence.csproj" />
-      <ProjectReference Include="..\SimpleMarket.Orders.Contracts\SimpleMarket.Orders.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\SimpleMarket.Orders.Persistence\SimpleMarket.Orders.Persistence.csproj"/>
+        <ProjectReference Include="..\SimpleMarket.Orders.Contracts\SimpleMarket.Orders.Contracts.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="appsettings.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="appsettings.Development.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.Development.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using MassTransit;
-using Amazon.SQS;
-using Amazon.SimpleNotificationService;
 using SimpleMarket.Carrier.Api.Diagnostics;
 using SimpleMarket.Carrier.Persistence.Data;
 using SimpleMarket.Carrier.Persistence.Extensions;
@@ -24,14 +22,12 @@ builder.Services.AddMassTransit(o =>
 {
     o.AddConsumers(typeof(Program).Assembly);
 
-    o.UsingAmazonSqs((context, cfg) =>
+    o.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(new Uri("amazonsqs://localhost:4566"), h =>
+        cfg.Host("localhost", "/", h =>
         {
-            h.AccessKey("simple-market");
-            h.SecretKey("Paroli1!");
-            h.Config(new AmazonSimpleNotificationServiceConfig { ServiceURL = "http://localhost:4566" });
-            h.Config(new AmazonSQSConfig { ServiceURL = "http://localhost:4566" });
+            h.Username("guest");
+            h.Password("guest");
         });
 
         cfg.ConfigureEndpoints(context);

@@ -11,19 +11,32 @@ services:
         volumes:
             - simple-market_postgres:/var/lib/postgresql/data
     
-    #local stack
-    localstack:
-        container_name: "simple-market-localstack"
-        image: localstack/localstack
+    #rabbit mq
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: simple-market-rabbitmq
         ports:
-            - "127.0.0.1:4566:4566"            # LocalStack Gateway
-            - "127.0.0.1:4510-4559:4510-4559"  # external services port range
-        environment:
-            - SERVICES=s3,sqs,sns
-            - DEBUG=1
+            - "5672:5672"  # AMQP port
+            - "15672:15672" # Management UI port
         volumes:
-            - "./volume:/var/lib/localstack"
-            - "/var/run/docker.sock:/var/run/docker.sock"
+            - simple-market-rabbitmq:/var/lib/rabbitmq
+        environment:
+            RABBITMQ_DEFAULT_USER: guest
+            RABBITMQ_DEFAULT_PASS: guest
+    
+    #local stack
+    #    localstack:
+    #        container_name: "simple-market-localstack"
+    #        image: localstack/localstack
+    #        ports:
+    #            - "127.0.0.1:4566:4566"            # LocalStack Gateway
+    #            - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    #        environment:
+    #            - SERVICES=s3,sqs,sns
+    #            - DEBUG=1
+    #        volumes:
+    #            - "./volume:/var/lib/localstack"
+    #            - "/var/run/docker.sock:/var/run/docker.sock"
     
     # Jaeger service
     jaeger:
@@ -87,7 +100,8 @@ services:
         ports:
             - "3100:3100"
         command: -config.file=/etc/loki/local-config.yaml
-        
+
 volumes:
     simple-market_postgres:
     grafana-storage:
+    simple-market-rabbitmq:

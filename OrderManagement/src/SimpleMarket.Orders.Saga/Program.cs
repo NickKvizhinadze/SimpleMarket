@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Hosting;
 using MassTransit;
-using Amazon.SQS;
-using Amazon.SimpleNotificationService;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using SimpleMarket.Orders.Persistence.Data;
 using SimpleMarket.Orders.Persistence.Saga;
 
@@ -16,14 +17,25 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((hostContext, config) =>
+            {
+                config.SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false)
+                    .AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: true)
+                    .AddEnvironmentVariables();
+            })
             .ConfigureServices((hostContext, services) =>
             {
+                
+                services.AddDbContext<OrdersDbContext>(opts =>
+                    opts.UseNpgsql(hostContext.Configuration.GetConnectionString("OrdersConnectionString")));
+                
                 services.AddMassTransit(o =>
                 {
                     o.SetEntityFrameworkSagaRepositoryProvider(r =>
                     {
                         r.ExistingDbContext<OrdersDbContext>();
-                        r.UseSqlServer();
+                        r.UsePostgres();
                     });
                     
                     o.AddSagaStateMachine<OrderStateMachine, OrderStateInstance>()
@@ -34,15 +46,12 @@ public class Program
                             r.UsePostgres();
                         });
 
-                    o.UsingAmazonSqs((context, cfg) =>
+                    o.UsingRabbitMq((context, cfg) =>
                     {
-                        cfg.Host(new Uri("amazonsqs://localhost:4566"), h =>
+                        cfg.Host("localhost", "/", h =>
                         {
-                            h.AccessKey("simple-market");
-                            h.SecretKey("Paroli1!");
-                            h.Config(new AmazonSimpleNotificationServiceConfig
-                                { ServiceURL = "http://localhost:4566" });
-                            h.Config(new AmazonSQSConfig { ServiceURL = "http://localhost:4566" });
+                            h.Username("guest");
+                            h.Password("guest");
                         });
 
                         cfg.ConfigureEndpoints(context);
