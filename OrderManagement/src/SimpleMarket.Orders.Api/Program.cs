@@ -3,8 +3,8 @@ using MassTransit;
 using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Api.Services;
 using SimpleMarket.Orders.Api.Diagnostics;
+using SimpleMarket.Orders.Api.Extensions;
 using SimpleMarket.Orders.Persistence.Data;
-using SimpleMarket.Orders.Persistence.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);

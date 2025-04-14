@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
 using SimpleMarket.Carrier.Persistence.Data;
 
-namespace SimpleMarket.Carrier.Persistence.Extensions;
+namespace SimpleMarket.Carrier.Api.Extensions;
 
 public static class DbContextExtensions
 {

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using MassTransit;
 using SimpleMarket.Carrier.Api.Diagnostics;
+using SimpleMarket.Carrier.Api.Extensions;
 using SimpleMarket.Carrier.Persistence.Data;
-using SimpleMarket.Carrier.Persistence.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
