@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using System.Diagnostics;
+using Microsoft.Extensions.Hosting;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleMarket.Orders.Persistence.Data;
 using SimpleMarket.Orders.Persistence.Saga;
+using SimpleMarket.Orders.Saga.Diagnostics;
 
 namespace SimpleMarket.Orders.Saga;
 
@@ -29,6 +31,8 @@ public class Program
                 
                 services.AddDbContext<OrdersDbContext>(opts =>
                     opts.UseNpgsql(hostContext.Configuration.GetConnectionString("OrdersConnectionString")));
+
+                services.AddOpenTelemetryService(hostContext.Configuration);
                 
                 services.AddMassTransit(o =>
                 {
@@ -56,6 +60,14 @@ public class Program
 
                         cfg.ConfigureEndpoints(context);
                     });
+                });
+                
+                ActivitySource.AddActivityListener(new ActivityListener
+                {
+                    ShouldListenTo = source => true,
+                    Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllDataAndRecorded,
+                    ActivityStarted = activity => Console.WriteLine($"Started: {activity.DisplayName} - {activity.Kind}"),
+                    ActivityStopped = activity => Console.WriteLine($"Stopped: {activity.DisplayName}")
                 });
             });
 }

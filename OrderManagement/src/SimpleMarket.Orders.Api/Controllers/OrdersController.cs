@@ -11,12 +11,10 @@ namespace SimpleMarket.Orders.Api.Controllers;
 public class OrdersController : ControllerBase
 {
     private readonly IOrdersService _service;
-    private readonly IPaymentService _paymentService;
 
-    public OrdersController(IOrdersService service, IPaymentService paymentService)
+    public OrdersController(IOrdersService service)
     {
         _service = service;
-        _paymentService = paymentService;
     }
 
     [HttpPost]
@@ -30,7 +28,8 @@ public class OrdersController : ControllerBase
 
         var orderData = result.Data;
         Activity.Current.EnrichWithOrderData(orderData!);
-        //TODO: check if baggage goes in SQS
+        
+        //TODO: check if baggage goes in Rabbit
         Baggage.SetBaggage("order.id", orderData!.Id.ToString());
         
         return Ok();

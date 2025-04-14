@@ -1,23 +1,23 @@
 ﻿using System.Reflection;
-using MassTransit.Logging;
-using MassTransit.Monitoring;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
-using OpenTelemetry.Trace;
 using OpenTelemetry.Resources;
-using SimpleMarket.Orders.Api.Models;
+using OpenTelemetry.Trace;
+using SimpleMarket.Orders.Saga.Models;
 
-namespace SimpleMarket.Orders.Api.Diagnostics;
+namespace SimpleMarket.Orders.Saga.Diagnostics;
 
 public static class OpenTelemetryConfiguration
 {
-    public static WebApplicationBuilder AddOpenTelemetry(this WebApplicationBuilder builder)
+    public static IServiceCollection AddOpenTelemetryService(this IServiceCollection services, IConfiguration configuration)
     {
-        var settings = builder.Configuration.GetSection(nameof(OpenTelemetrySettings)).Get<OpenTelemetrySettings>();
+        var settings = configuration.GetSection(nameof(OpenTelemetrySettings)).Get<OpenTelemetrySettings>();
         var serviceName = "SimpleMarket.Orders.Api";
 
-        builder.Services.AddOpenTelemetry()
+        services.AddOpenTelemetry()
             .ConfigureResource(resource =>
             {
                 resource.AddService(serviceName)
@@ -56,6 +56,6 @@ public static class OpenTelemetryConfiguration
                     options.Endpoint = new Uri(settings!.OtlpEndpoint);
                 }));
 
-        return builder;
+        return services;
     }
 }

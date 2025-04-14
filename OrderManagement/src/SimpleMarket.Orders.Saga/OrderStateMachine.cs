@@ -18,8 +18,8 @@ public class OrderStateMachine : MassTransitStateMachine<OrderStateInstance>
     public Event<OrderCreated> OrderCreated { get; set; }
     public Event<OrderPaid> OrderPaid { get; set; }
     public Event<OrderShipped> OrderShipped { get; set; }
-    public Event<OrderCompleted> OrderCompleted { get; set; }
     public Event<OrderCanceled> OrderCanceled { get; set; }
+    public Event<OrderCompleted> OrderCompleted { get; set; }
 
     public OrderStateMachine()
     {
@@ -28,8 +28,8 @@ public class OrderStateMachine : MassTransitStateMachine<OrderStateInstance>
         Event(() => OrderCreated, x => x.CorrelateById(context => context.Message.OrderId));
         Event(() => OrderPaid, x => x.CorrelateById(context => context.Message.OrderId));
         Event(() => OrderShipped, x => x.CorrelateById(context => context.Message.OrderId));
-        Event(() => OrderCompleted, x => x.CorrelateById(context => context.Message.OrderId));
         Event(() => OrderCanceled, x => x.CorrelateById(context => context.Message.OrderId));
+        Event(() => OrderCompleted, x => x.CorrelateById(context => context.Message.OrderId));
         
         Initially(
             When(OrderCreated)
@@ -85,5 +85,8 @@ public class OrderStateMachine : MassTransitStateMachine<OrderStateInstance>
                 {
                     OrderId = context.Message.OrderId
                 }));
+        
+        DuringAny(When(OrderCompleted).Finalize());
+        SetCompletedWhenFinalized();
     }
 }

@@ -19,6 +19,13 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddDbContext<OrdersDbContext>(opts =>
     opts.UseNpgsql(configuration.GetConnectionString("OrdersConnectionString")));
 
+
+#region OpenTelemetry
+
+builder.AddOpenTelemetry();
+
+#endregion
+
 #region MassTransit
 
 builder.Services.AddMassTransit(o =>
@@ -42,21 +49,8 @@ builder.Services.AddMassTransit(o =>
 #region Register Services
 
 builder.Services.AddScoped<IOrdersService, OrdersService>();
-builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 #endregion
-
-#region OpenTelemetry
-
-builder.AddOpenTelemetry();
-
-#endregion
-
-builder.Services.AddHttpClient("PaymentServiceClient", client =>
-{
-    var settings = builder.Configuration.GetSection(nameof(PaymentsSettings)).Get<PaymentsSettings>();
-    client.BaseAddress = new Uri(settings!.BaseUrl);
-});
 
 var app = builder.Build();
 
