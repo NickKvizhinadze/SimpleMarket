@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using MassTransit.Logging;
-using MassTransit.Monitoring;
 using Npgsql;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
@@ -15,12 +13,11 @@ public static class OpenTelemetryConfiguration
     public static WebApplicationBuilder AddOpenTelemetry(this WebApplicationBuilder builder)
     {
         var settings = builder.Configuration.GetSection(nameof(OpenTelemetrySettings)).Get<OpenTelemetrySettings>();
-        var serviceName = "SimpleMarket.Orders.Api";
 
         builder.Services.AddOpenTelemetry()
             .ConfigureResource(resource =>
             {
-                resource.AddService(serviceName)
+                resource.AddService(ApplicationDiagnostics.ServiceName)
                     .AddAttributes(new[]
                     {
                         new KeyValuePair<string, object>("service.version",
@@ -32,6 +29,7 @@ public static class OpenTelemetryConfiguration
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddNpgsql()
+                    .AddSource("MassTransit")
                     .AddMassTransitInstrumentation()
                     .AddConsoleExporter()
                     .AddOtlpExporter(options =>

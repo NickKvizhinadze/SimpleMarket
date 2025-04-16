@@ -1,9 +1,6 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using OpenTelemetry;
+﻿using Microsoft.AspNetCore.Mvc;
 using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Api.Services;
-using SimpleMarket.Orders.Api.Diagnostics.Extensions;
 
 namespace SimpleMarket.Orders.Api.Controllers;
 
@@ -20,19 +17,14 @@ public class OrdersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] RequestCheckoutDto model, CancellationToken cancellationToken)
     {
-        Activity.Current.EnrichWithOrderRequestData(model);
         var result = await _service.Checkout(model, cancellationToken);
 
         if (!result.Succeeded)
             return BadRequest(result.Errors);
 
         var orderData = result.Data;
-        Activity.Current.EnrichWithOrderData(orderData!);
         
-        //TODO: check if baggage goes in Rabbit
-        Baggage.SetBaggage("order.id", orderData!.Id.ToString());
-        
-        return Ok();
+        return Ok(orderData!.Id);
     }
 
     [HttpGet]

@@ -26,8 +26,16 @@ public class OrderCreatedEventHandler : IConsumer<OrderCreatedEvent>
     {
         _logger.LogInformation(JsonSerializer.Serialize(context.Message));
 
-        var orderId = Baggage.Current.GetBaggage("order.id");
-        Activity.Current?.AddTag("order.id", orderId);
+        using var activity = Activity.Current?.Source.StartActivity("Payments.ProcessOrderCreated", ActivityKind.Consumer);
+        if (activity != null)
+        {
+            activity.SetTag("messaging.system", "rabbitmq");
+            activity.SetTag("messaging.operation", "receive");
+            activity.SetTag("messaging.destination", "order-created");
+            activity.SetTag("order.id", context.Message.OrderId);
+            activity.SetTag("order.customerId", context.Message.CustomerId);
+            activity.SetTag("order.paymentMethod", context.Message.PaymentMethod);
+        }
 
         var message = context.Message;
         var result = await _service.CreatePayment(new CreatePaymentDto

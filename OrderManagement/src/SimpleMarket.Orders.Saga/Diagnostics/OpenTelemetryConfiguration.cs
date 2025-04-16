@@ -12,15 +12,15 @@ namespace SimpleMarket.Orders.Saga.Diagnostics;
 
 public static class OpenTelemetryConfiguration
 {
+    public const string ServiceName = "SimpleMarket.Orders.Saga";
     public static IServiceCollection AddOpenTelemetryService(this IServiceCollection services, IConfiguration configuration)
     {
         var settings = configuration.GetSection(nameof(OpenTelemetrySettings)).Get<OpenTelemetrySettings>();
-        var serviceName = "SimpleMarket.Orders.Api";
 
         services.AddOpenTelemetry()
             .ConfigureResource(resource =>
             {
-                resource.AddService(serviceName)
+                resource.AddService(ApplicationDiagnostics.ServiceName)
                     .AddAttributes(new[]
                     {
                         new KeyValuePair<string, object>("service.version",
@@ -32,13 +32,14 @@ public static class OpenTelemetryConfiguration
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddNpgsql()
+                    .AddSource("MassTransit")
                     .AddMassTransitInstrumentation()
                     .AddConsoleExporter()
                     .AddOtlpExporter(options =>
                         options.Endpoint = new Uri(settings!.OtlpEndpoint)
                     )
             )
-            .WithMetrics(metrics => 
+            .WithMetrics(metrics =>
                 metrics
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()

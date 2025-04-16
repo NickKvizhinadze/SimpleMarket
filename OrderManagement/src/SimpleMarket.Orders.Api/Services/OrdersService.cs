@@ -1,12 +1,14 @@
-﻿using DotNetHelpers.Extentions;
-using DotNetHelpers.Models;
+﻿using System.Diagnostics;
 using MassTransit;
+using DotNetHelpers.Extentions;
+using DotNetHelpers.Models;
 using Microsoft.EntityFrameworkCore;
+using SimpleMarket.Orders.Contracts;
 using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Api.Diagnostics;
-using SimpleMarket.Orders.Contracts;
 using SimpleMarket.Orders.Domain.Entities;
 using SimpleMarket.Orders.Persistence.Data;
+using SimpleMarket.Orders.Api.Diagnostics.Extensions;
 
 namespace SimpleMarket.Orders.Api.Services;
 
@@ -25,6 +27,9 @@ public class OrdersService : IOrdersService
     {
         try
         {
+            using var activity = Activity.Current?.Source.StartActivity("OrdersService.Checkout");
+            activity?.EnrichWithOrderRequestData(model);
+            
             var order = new Order
             {
                 CustomerId = model.CustomerId,
@@ -45,12 +50,15 @@ public class OrdersService : IOrdersService
             await _dbContext.Orders.AddAsync(order, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
+            activity?.EnrichWithOrderData(order);
+            
             await _publishEndpoint.Publish(new OrderCreated
             {
                 CreatedAt = order.CreateDate,
                 OrderId = order.Id,
                 CustomerId = order.CustomerId,
-                TotalAmount = order.OrderItems.Sum(x => x.Price * x.Quantity)
+                TotalAmount = order.OrderItems.Sum(x => x.Price * x.Quantity),
+                PaymentMethod = (Contracts.PaymentMethod)order.PaymentMethod
             }, cancellationToken);
             
             ApplicationDiagnostics.OrdersCreatedCounter.Add(1);

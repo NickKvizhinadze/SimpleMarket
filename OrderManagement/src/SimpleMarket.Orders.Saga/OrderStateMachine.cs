@@ -2,6 +2,9 @@
 using SimpleMarket.Orders.Contracts;
 using SimpleMarket.Orders.Domain.Entities;
 using SimpleMarket.Orders.Persistence.Saga;
+using System.Diagnostics;
+using OpenTelemetry;
+using SimpleMarket.Orders.Saga.Diagnostics;
 
 namespace SimpleMarket.Orders.Saga;
 
@@ -11,7 +14,7 @@ public class OrderStateMachine : MassTransitStateMachine<OrderStateInstance>
     public State Pending { get; set; }
     public State Paid { get; set; }
     public State Shipped { get; set; }
-    
+
     public State Completed { get; set; }
     public State Canceled { get; set; }
 
@@ -30,7 +33,7 @@ public class OrderStateMachine : MassTransitStateMachine<OrderStateInstance>
         Event(() => OrderShipped, x => x.CorrelateById(context => context.Message.OrderId));
         Event(() => OrderCanceled, x => x.CorrelateById(context => context.Message.OrderId));
         Event(() => OrderCompleted, x => x.CorrelateById(context => context.Message.OrderId));
-        
+
         Initially(
             When(OrderCreated)
                 .Then(context =>
@@ -40,17 +43,31 @@ public class OrderStateMachine : MassTransitStateMachine<OrderStateInstance>
                     context.Saga.CurrentState = OrderState.Pending.ToString();
                     context.Saga.CreatedDate = context.Message.CreatedAt;
                     context.Saga.TotalPrice = context.Message.TotalAmount;
-                    //TODO: maybe need to log in otel
                 })
                 .TransitionTo(Pending)
-                .Publish(context => new OrderCreatedEvent()
+                .Publish(context =>
                 {
-                    OrderId = context.Message.OrderId,
-                    CustomerId = context.Message.CustomerId,
-                    Amount = context.Message.TotalAmount,
-                    PaymentMethod = context.Message.PaymentMethod,
+                    // Create a new activity for the publish operation that will be part of the same trace
+                    using var publishActivity =
+                        Activity.Current?.Source.StartActivity("OrderStateMachine.PublishOrderCreated",
+                            ActivityKind.Producer);
+                    publishActivity?.SetTag("messaging.system", "rabbitmq");
+                    publishActivity?.SetTag("messaging.operation", "publish");
+                    publishActivity?.SetTag("messaging.destination", "order-created");
+                    publishActivity?.SetTag("order.id", context.Message.OrderId);
+                    publishActivity?.SetTag("order.customerId", context.Message.CustomerId);
+                    publishActivity?.SetTag("order.totalAmount", context.Message.TotalAmount);
+                    publishActivity?.SetTag("order.paymentMethod", context.Message.PaymentMethod);
+
+                    return new OrderCreatedEvent()
+                    {
+                        OrderId = context.Message.OrderId,
+                        CustomerId = context.Message.CustomerId,
+                        Amount = context.Message.TotalAmount,
+                        PaymentMethod = context.Message.PaymentMethod,
+                    };
                 })
-            );
+        );
 
         During(Pending,
             When(OrderPaid)
@@ -71,7 +88,7 @@ public class OrderStateMachine : MassTransitStateMachine<OrderStateInstance>
                 {
                     OrderId = context.Message.OrderId
                 })
-            );
+        );
 
         During(Paid,
             When(OrderShipped)
@@ -85,7 +102,7 @@ public class OrderStateMachine : MassTransitStateMachine<OrderStateInstance>
                 {
                     OrderId = context.Message.OrderId
                 }));
-        
+
         DuringAny(When(OrderCompleted).Finalize());
         SetCompletedWhenFinalized();
     }

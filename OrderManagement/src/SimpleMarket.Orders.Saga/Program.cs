@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SimpleMarket.Orders.Persistence.Data;
 using SimpleMarket.Orders.Persistence.Saga;
 using SimpleMarket.Orders.Saga.Diagnostics;
+using OpenTelemetry.Instrumentation.MassTransit;
 
 namespace SimpleMarket.Orders.Saga;
 
@@ -57,17 +58,9 @@ public class Program
                             h.Username("guest");
                             h.Password("guest");
                         });
-
+                        
                         cfg.ConfigureEndpoints(context);
                     });
-                });
-                
-                ActivitySource.AddActivityListener(new ActivityListener
-                {
-                    ShouldListenTo = source => true,
-                    Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllDataAndRecorded,
-                    ActivityStarted = activity => Console.WriteLine($"Started: {activity.DisplayName} - {activity.Kind}"),
-                    ActivityStopped = activity => Console.WriteLine($"Stopped: {activity.DisplayName}")
                 });
             });
 }

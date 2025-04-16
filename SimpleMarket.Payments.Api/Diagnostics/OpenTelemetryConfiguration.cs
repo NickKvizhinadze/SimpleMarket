@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using Npgsql;
 using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using SimpleMarket.Payments.Api.Models;
@@ -11,12 +13,11 @@ public static class OpenTelemetryConfiguration
     public static WebApplicationBuilder AddOpenTelemetry(this WebApplicationBuilder builder)
     {
         var settings = builder.Configuration.GetSection(nameof(OpenTelemetrySettings)).Get<OpenTelemetrySettings>();
-        var serviceName = "SimpleMarket.Payments.Api";
 
         builder.Services.AddOpenTelemetry()
             .ConfigureResource(resource =>
             {
-                resource.AddService(serviceName)
+                resource.AddService(ApplicationDiagnostics.ServiceName)
                     .AddAttributes(new[]
                     {
                         new KeyValuePair<string, object>("service.version",
@@ -24,7 +25,24 @@ public static class OpenTelemetryConfiguration
                     });
             })
             .WithTracing(tracing =>
-                tracing.AddAspNetCoreInstrumentation()
+                tracing
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddNpgsql()
+                    .AddSource("MassTransit")
+                    .AddMassTransitInstrumentation()
+                    .AddConsoleExporter()
+                    .AddOtlpExporter(options =>
+                        options.Endpoint = new Uri(settings!.OtlpEndpoint)
+                    )
+            )
+            .WithMetrics(metrics => 
+                metrics
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddMeter("Microsoft.AspNetCore.Hosting")
+                    .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
+                    .AddMeter(ApplicationDiagnostics.Meter.Name)
                     .AddConsoleExporter()
                     .AddOtlpExporter(options =>
                         options.Endpoint = new Uri(settings!.OtlpEndpoint)
