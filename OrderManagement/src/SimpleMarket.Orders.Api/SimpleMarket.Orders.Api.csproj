@@ -42,6 +42,7 @@
       <ProjectReference Include="..\..\..\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj" />
       <ProjectReference Include="..\..\..\SimpleMarket.Orders.Domain\SimpleMarket.Orders.Domain.csproj" />
       <ProjectReference Include="..\..\..\SimpleMarket.Orders.Persistence\SimpleMarket.Orders.Persistence.csproj" />
+      <ProjectReference Include="..\..\..\SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj" />
       <ProjectReference Include="..\SimpleMarket.Orders.Contracts\SimpleMarket.Orders.Contracts.csproj" />
     </ItemGroup>
 

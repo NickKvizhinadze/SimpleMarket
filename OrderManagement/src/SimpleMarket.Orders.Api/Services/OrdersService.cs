@@ -9,6 +9,7 @@ using SimpleMarket.Orders.Api.Diagnostics;
 using SimpleMarket.Orders.Domain.Entities;
 using SimpleMarket.Orders.Persistence.Data;
 using SimpleMarket.Orders.Api.Diagnostics.Extensions;
+using SimpleMarket.SharedLibrary.Events;
 
 namespace SimpleMarket.Orders.Api.Services;
 
@@ -29,7 +30,7 @@ public class OrdersService : IOrdersService
         {
             using var activity = Activity.Current?.Source.StartActivity("OrdersService.Checkout");
             activity?.EnrichWithOrderRequestData(model);
-            
+
             var order = new Order
             {
                 CustomerId = model.CustomerId,
@@ -44,14 +45,14 @@ public class OrdersService : IOrdersService
                     ProductId = p.Id,
                     Quantity = p.Quantity,
                     Price = p.Price
-                }).ToList()?? []
+                }).ToList() ?? []
             };
 
             await _dbContext.Orders.AddAsync(order, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             activity?.EnrichWithOrderData(order);
-            
+
             await _publishEndpoint.Publish(new OrderCreated
             {
                 CreatedAt = order.CreateDate,
@@ -59,8 +60,14 @@ public class OrdersService : IOrdersService
                 CustomerId = order.CustomerId,
                 TotalAmount = order.OrderItems.Sum(x => x.Price * x.Quantity),
                 PaymentMethod = (Contracts.PaymentMethod)order.PaymentMethod
+            }, context =>
+            {
+                var guid = Guid.NewGuid().ToString();
+                context.Headers.Set(EventConstants.EventIdHeaderKey, guid);
+                context.Headers.Set(EventConstants.EventTimeHeaderKey,
+                    DateTime.UtcNow.ToString(EventConstants.Formats.DateFormat));
             }, cancellationToken);
-            
+
             ApplicationDiagnostics.OrdersCreatedCounter.Add(1);
 
             return Result.SuccessResult().WithData(order);

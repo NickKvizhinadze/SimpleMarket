@@ -5,6 +5,7 @@ using SimpleMarket.Orders.Persistence.Saga;
 using System.Diagnostics;
 using OpenTelemetry;
 using SimpleMarket.Orders.Saga.Diagnostics;
+using SimpleMarket.SharedLibrary.Events;
 
 namespace SimpleMarket.Orders.Saga;
 
@@ -47,17 +48,14 @@ public class OrderStateMachine : MassTransitStateMachine<OrderStateInstance>
                 .TransitionTo(Pending)
                 .Publish(context =>
                 {
-                    // Create a new activity for the publish operation that will be part of the same trace
-                    using var publishActivity =
-                        Activity.Current?.Source.StartActivity("OrderStateMachine.PublishOrderCreated",
-                            ActivityKind.Producer);
-                    publishActivity?.SetTag("messaging.system", "rabbitmq");
-                    publishActivity?.SetTag("messaging.operation", "publish");
-                    publishActivity?.SetTag("messaging.destination", "order-created");
-                    publishActivity?.SetTag("order.id", context.Message.OrderId);
-                    publishActivity?.SetTag("order.customerId", context.Message.CustomerId);
-                    publishActivity?.SetTag("order.totalAmount", context.Message.TotalAmount);
-                    publishActivity?.SetTag("order.paymentMethod", context.Message.PaymentMethod);
+                    Activity.Current?.SetTag("messaging.system", "rabbitmq");
+                    Activity.Current?.SetTag("messaging.operation", "publish");
+                    Activity.Current?.SetTag("messaging.destination", "order-created");
+                    Activity.Current?.SetTag(EventConstants.EventIdHeaderKey, context.Headers.Get<string>(EventConstants.EventIdHeaderKey));
+                    Activity.Current?.SetTag("order.id", context.Message.OrderId);
+                    Activity.Current?.SetTag("order.customerId", context.Message.CustomerId);
+                    Activity.Current?.SetTag("order.totalAmount", context.Message.TotalAmount);
+                    Activity.Current?.SetTag("order.paymentMethod", context.Message.PaymentMethod);
 
                     return new OrderCreatedEvent()
                     {
