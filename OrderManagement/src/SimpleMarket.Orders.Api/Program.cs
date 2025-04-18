@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using MassTransit;
-using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Api.Services;
 using SimpleMarket.Orders.Api.Diagnostics;
 using SimpleMarket.Orders.Api.Extensions;

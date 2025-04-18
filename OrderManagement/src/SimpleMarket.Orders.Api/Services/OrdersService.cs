@@ -28,8 +28,8 @@ public class OrdersService : IOrdersService
     {
         try
         {
-            using var activity = Activity.Current?.Source.StartActivity("OrdersService.Checkout");
-            activity?.EnrichWithOrderRequestData(model);
+            
+            Activity.Current?.EnrichWithOrderRequestData(model);
 
             var order = new Order
             {
@@ -51,14 +51,18 @@ public class OrdersService : IOrdersService
             await _dbContext.Orders.AddAsync(order, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            activity?.EnrichWithOrderData(order);
+
+            var totalAmount = order.OrderItems.Sum(x => x.Price * x.Quantity);
+            ApplicationDiagnostics.AddNewOrder((double)totalAmount);
+            
+            Activity.Current?.EnrichWithOrderData(order);
 
             await _publishEndpoint.Publish(new OrderCreated
             {
                 CreatedAt = order.CreateDate,
                 OrderId = order.Id,
                 CustomerId = order.CustomerId,
-                TotalAmount = order.OrderItems.Sum(x => x.Price * x.Quantity),
+                TotalAmount = totalAmount,
                 PaymentMethod = (Contracts.PaymentMethod)order.PaymentMethod
             }, context =>
             {
@@ -68,7 +72,6 @@ public class OrdersService : IOrdersService
                     DateTime.UtcNow.ToString(EventConstants.Formats.DateFormat));
             }, cancellationToken);
 
-            ApplicationDiagnostics.OrdersCreatedCounter.Add(1);
 
             return Result.SuccessResult().WithData(order);
         }
