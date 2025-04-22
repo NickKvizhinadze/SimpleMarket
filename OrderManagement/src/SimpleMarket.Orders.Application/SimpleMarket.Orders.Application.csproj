@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\SimpleMarket.Catalog.Contracts\SimpleMarket.Catalog.Contracts.csproj" />
+      <ProjectReference Include="..\..\..\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj" />
+      <ProjectReference Include="..\..\..\SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj" />
+      <ProjectReference Include="..\SimpleMarket.Orders.Contracts\SimpleMarket.Orders.Contracts.csproj" />
+      <ProjectReference Include="..\SimpleMarket.Orders.Domain\SimpleMarket.Orders.Domain.csproj" />
+      <ProjectReference Include="..\SimpleMarket.Orders.Persistence\SimpleMarket.Orders.Persistence.csproj" />
+      <ProjectReference Include="..\SimpleMarket.Orders.Shared\SimpleMarket.Orders.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Kvizhinadze.DotNetHelpers" Version="3.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Common\" />
+    </ItemGroup>
+
+</Project>

@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Domain.Entities;
+using SimpleMarket.Orders.Application.Orders.Models;
 
-namespace SimpleMarket.Orders.Api.Diagnostics.Extensions;
+namespace SimpleMarket.Orders.Application.Common.Extensions;
 
 public static class ActivityExtensions
 {

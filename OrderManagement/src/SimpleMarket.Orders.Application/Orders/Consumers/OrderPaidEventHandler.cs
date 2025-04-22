@@ -1,10 +1,11 @@
 ﻿using System.Text.Json;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 using SimpleMarket.Orders.Contracts;
 using SimpleMarket.Orders.Domain.Entities;
 using SimpleMarket.Orders.Persistence.Data;
 
-namespace SimpleMarket.Orders.Api.Consumers;
+namespace SimpleMarket.Orders.Application.Orders.Consumers;
 
 public class OrderPaidEventHandler : IConsumer<OrderPaidEvent>
 {

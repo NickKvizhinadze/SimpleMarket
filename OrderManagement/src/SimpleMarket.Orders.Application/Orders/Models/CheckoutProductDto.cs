@@ -1,4 +1,4 @@
-namespace SimpleMarket.Orders.Api.Models;
+namespace SimpleMarket.Orders.Application.Orders.Models;
 
 public class CheckoutProductDto
 {

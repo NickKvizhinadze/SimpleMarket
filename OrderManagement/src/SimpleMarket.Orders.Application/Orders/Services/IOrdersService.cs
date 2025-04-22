@@ -1,8 +1,8 @@
 ﻿using DotNetHelpers.Models;
-using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Domain.Entities;
+using SimpleMarket.Orders.Application.Orders.Models;
 
-namespace SimpleMarket.Orders.Api.Services;
+namespace SimpleMarket.Orders.Application.Orders.Services;
 
 public interface IOrdersService
 {

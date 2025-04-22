@@ -27,9 +27,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{63300A1E-6FE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Saga", "OrderManagement\src\SimpleMarket.Orders.Saga\SimpleMarket.Orders.Saga.csproj", "{712CDF9F-6D48-48C2-B70C-240A58485D15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Persistence", "SimpleMarket.Orders.Persistence\SimpleMarket.Orders.Persistence.csproj", "{4009676C-9177-4C21-8DF9-F91A62D69C23}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Persistence", "OrderManagement\src\SimpleMarket.Orders.Persistence\SimpleMarket.Orders.Persistence.csproj", "{4009676C-9177-4C21-8DF9-F91A62D69C23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Domain", "SimpleMarket.Orders.Domain\SimpleMarket.Orders.Domain.csproj", "{D56E4BFE-A11A-4B8C-9420-503FCFA16BAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Domain", "OrderManagement\src\SimpleMarket.Orders.Domain\SimpleMarket.Orders.Domain.csproj", "{D56E4BFE-A11A-4B8C-9420-503FCFA16BAE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Contracts", "OrderManagement\src\SimpleMarket.Orders.Contracts\SimpleMarket.Orders.Contracts.csproj", "{F7274F4C-EDE8-42BF-B353-0D67F6F3F375}"
 EndProject
@@ -44,6 +44,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Carrier.Persistence", "SimpleMarket.Carrier.Persistence\SimpleMarket.Carrier.Persistence.csproj", "{45156FFA-0CEA-42C8-A1C8-D9DFDD2D2691}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.SharedLibrary", "SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj", "{A9E302D1-48BC-4A84-9E15-EC1080C48F6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Application", "OrderManagement\src\SimpleMarket.Orders.Application\SimpleMarket.Orders.Application.csproj", "{09A302D8-C610-4C1D-8F67-8DA65B7E6D5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Shared", "OrderManagement\src\SimpleMarket.Orders.Shared\SimpleMarket.Orders.Shared.csproj", "{7AF6AFD9-A4DD-4C4D-A9D0-F5454E012376}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,6 +111,14 @@ Global
 		{A9E302D1-48BC-4A84-9E15-EC1080C48F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9E302D1-48BC-4A84-9E15-EC1080C48F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9E302D1-48BC-4A84-9E15-EC1080C48F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09A302D8-C610-4C1D-8F67-8DA65B7E6D5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09A302D8-C610-4C1D-8F67-8DA65B7E6D5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09A302D8-C610-4C1D-8F67-8DA65B7E6D5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09A302D8-C610-4C1D-8F67-8DA65B7E6D5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AF6AFD9-A4DD-4C4D-A9D0-F5454E012376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AF6AFD9-A4DD-4C4D-A9D0-F5454E012376}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AF6AFD9-A4DD-4C4D-A9D0-F5454E012376}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AF6AFD9-A4DD-4C4D-A9D0-F5454E012376}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{63300A1E-6FE1-4B0B-B228-EB4EBD44ADCF} = {EFBDF63A-9842-4CC6-9A84-970D79C9A09F}
@@ -119,5 +131,7 @@ Global
 		{8C2E0201-FB31-4282-AD8F-10DA64AFE850} = {38A30B02-0F33-482D-B7F5-7FCC860B1287}
 		{FC31A497-4D36-47AE-BEB9-454E74724870} = {38A30B02-0F33-482D-B7F5-7FCC860B1287}
 		{45156FFA-0CEA-42C8-A1C8-D9DFDD2D2691} = {38A30B02-0F33-482D-B7F5-7FCC860B1287}
+		{09A302D8-C610-4C1D-8F67-8DA65B7E6D5C} = {63300A1E-6FE1-4B0B-B228-EB4EBD44ADCF}
+		{7AF6AFD9-A4DD-4C4D-A9D0-F5454E012376} = {63300A1E-6FE1-4B0B-B228-EB4EBD44ADCF}
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SimpleMarket.Orders.Api.Models;
-using SimpleMarket.Orders.Api.Services;
+using SimpleMarket.Orders.Application.Orders.Models;
+using SimpleMarket.Orders.Application.Orders.Services;
 
 namespace SimpleMarket.Orders.Api.Controllers;
 

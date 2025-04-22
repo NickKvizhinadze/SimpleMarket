@@ -1,26 +1,21 @@
 ﻿using System.Reflection;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using SimpleMarket.Orders.Saga.Models;
 
-namespace SimpleMarket.Orders.Saga.Diagnostics;
+namespace SimpleMarket.Orders.Shared.Diagnostics;
 
 public static class OpenTelemetryConfiguration
 {
-    public const string ServiceName = "SimpleMarket.Orders.Saga";
-    public static IServiceCollection AddOpenTelemetryService(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddOpenTelemetryService(this IServiceCollection services, string serviceName, string otelEndpoint)
     {
-        var settings = configuration.GetSection(nameof(OpenTelemetrySettings)).Get<OpenTelemetrySettings>();
-
         services.AddOpenTelemetry()
             .ConfigureResource(resource =>
             {
-                resource.AddService(ApplicationDiagnostics.ServiceName)
+                resource.AddService(serviceName)
                     .AddAttributes(new[]
                     {
                         new KeyValuePair<string, object>("service.version",
@@ -36,7 +31,7 @@ public static class OpenTelemetryConfiguration
                     .AddMassTransitInstrumentation()
                     .AddConsoleExporter()
                     .AddOtlpExporter(options =>
-                        options.Endpoint = new Uri(settings!.OtlpEndpoint)
+                        options.Endpoint = new Uri(otelEndpoint)
                     )
             )
             .WithMetrics(metrics =>
@@ -48,13 +43,13 @@ public static class OpenTelemetryConfiguration
                     .AddMeter(ApplicationDiagnostics.Meter.Name)
                     .AddConsoleExporter()
                     .AddOtlpExporter(options =>
-                        options.Endpoint = new Uri(settings!.OtlpEndpoint)
+                        options.Endpoint = new Uri(otelEndpoint)
                     )
-                )
+            )
             .WithLogging(logging => 
                 logging.AddOtlpExporter(options =>
                 {
-                    options.Endpoint = new Uri(settings!.OtlpEndpoint);
+                    options.Endpoint = new Uri(otelEndpoint);
                 }));
 
         return services;

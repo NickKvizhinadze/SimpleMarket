@@ -8,6 +8,8 @@ using SimpleMarket.Orders.Persistence.Data;
 using SimpleMarket.Orders.Persistence.Saga;
 using SimpleMarket.Orders.Saga.Diagnostics;
 using OpenTelemetry.Instrumentation.MassTransit;
+using SimpleMarket.Orders.Saga.Models;
+using SimpleMarket.Orders.Shared.Diagnostics;
 
 namespace SimpleMarket.Orders.Saga;
 
@@ -33,7 +35,8 @@ public class Program
                 services.AddDbContext<OrdersDbContext>(opts =>
                     opts.UseNpgsql(hostContext.Configuration.GetConnectionString("OrdersConnectionString")));
 
-                services.AddOpenTelemetryService(hostContext.Configuration);
+                var openTelemetrySettings = hostContext.Configuration.GetSection(nameof(OpenTelemetrySettings)).Get<OpenTelemetrySettings>();
+                services.AddOpenTelemetryService("SimpleMarket.Orders.Saga", openTelemetrySettings!.OtlpEndpoint);
                 
                 services.AddMassTransit(o =>
                 {

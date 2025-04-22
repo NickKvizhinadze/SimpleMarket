@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using MassTransit;
-using SimpleMarket.Orders.Api.Services;
-using SimpleMarket.Orders.Api.Diagnostics;
+using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Api.Extensions;
 using SimpleMarket.Orders.Persistence.Data;
+using SimpleMarket.Orders.Shared.Diagnostics;
+using SimpleMarket.Orders.Application.Orders.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,8 +21,8 @@ builder.Services.AddDbContext<OrdersDbContext>(opts =>
 
 
 #region OpenTelemetry
-
-builder.AddOpenTelemetry();
+var openTelemetrySettings = builder.Configuration.GetSection(nameof(OpenTelemetrySettings)).Get<OpenTelemetrySettings>();
+builder.Services.AddOpenTelemetryService("SimpleMarket.Orders.Saga", openTelemetrySettings!.OtlpEndpoint);
 
 #endregion
 

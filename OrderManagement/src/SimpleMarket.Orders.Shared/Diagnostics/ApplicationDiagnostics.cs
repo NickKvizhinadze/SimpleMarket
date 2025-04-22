@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics.Metrics;
 
-namespace SimpleMarket.Orders.Api.Diagnostics;
+namespace SimpleMarket.Orders.Shared.Diagnostics;
 
 public static class ApplicationDiagnostics
 {
-    public const string ServiceName = "SimpleMarket.Orders.Api";
+    public const string ServiceName = "SimpleMarket.Orders";
     public static readonly Meter Meter = new(ServiceName);
 
     private static readonly Counter<long> _ordersCreatedCounter = Meter.CreateCounter<long>("orders_created_total");

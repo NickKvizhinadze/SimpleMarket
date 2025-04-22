@@ -1,17 +1,17 @@
 ﻿using System.Diagnostics;
-using MassTransit;
 using DotNetHelpers.Extentions;
 using DotNetHelpers.Models;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using SimpleMarket.Orders.Application.Common.Extensions;
+using SimpleMarket.Orders.Application.Orders.Models;
 using SimpleMarket.Orders.Contracts;
-using SimpleMarket.Orders.Api.Models;
-using SimpleMarket.Orders.Api.Diagnostics;
 using SimpleMarket.Orders.Domain.Entities;
 using SimpleMarket.Orders.Persistence.Data;
-using SimpleMarket.Orders.Api.Diagnostics.Extensions;
+using SimpleMarket.Orders.Shared.Diagnostics;
 using SimpleMarket.SharedLibrary.Events;
 
-namespace SimpleMarket.Orders.Api.Services;
+namespace SimpleMarket.Orders.Application.Orders.Services;
 
 public class OrdersService : IOrdersService
 {
@@ -57,20 +57,7 @@ public class OrdersService : IOrdersService
             
             Activity.Current?.EnrichWithOrderData(order);
 
-            await _publishEndpoint.Publish(new OrderCreated
-            {
-                CreatedAt = order.CreateDate,
-                OrderId = order.Id,
-                CustomerId = order.CustomerId,
-                TotalAmount = totalAmount,
-                PaymentMethod = (Contracts.PaymentMethod)order.PaymentMethod
-            }, context =>
-            {
-                var guid = Guid.NewGuid().ToString();
-                context.Headers.Set(EventConstants.EventIdHeaderKey, guid);
-                context.Headers.Set(EventConstants.EventTimeHeaderKey,
-                    DateTime.UtcNow.ToString(EventConstants.Formats.DateFormat));
-            }, cancellationToken);
+            await PublishOrderCreated(order, totalAmount, cancellationToken);
 
 
             return Result.SuccessResult().WithData(order);
@@ -87,4 +74,25 @@ public class OrdersService : IOrdersService
     {
         return _dbContext.Orders.ToListAsync(cancellationToken);
     }
+    
+    #region Private Methods
+
+    private async Task PublishOrderCreated(Order order, decimal totalAmount, CancellationToken cancellationToken)
+    {
+        await _publishEndpoint.Publish(new OrderCreated
+        {
+            CreatedAt = order.CreateDate,
+            OrderId = order.Id,
+            CustomerId = order.CustomerId,
+            TotalAmount = totalAmount,
+            PaymentMethod = (Contracts.PaymentMethod)order.PaymentMethod
+        }, context =>
+        {
+            var guid = Guid.NewGuid().ToString();
+            context.Headers.Set(EventConstants.EventIdHeaderKey, guid);
+            context.Headers.Set(EventConstants.EventTimeHeaderKey,
+                DateTime.UtcNow.ToString(EventConstants.Formats.DateFormat));
+        }, cancellationToken);
+    }
+    #endregion
 }
