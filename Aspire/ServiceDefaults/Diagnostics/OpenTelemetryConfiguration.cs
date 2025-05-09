@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using OpenTelemetry.Logs;
@@ -6,12 +7,16 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
-namespace SimpleMarket.Orders.Shared.Diagnostics;
+namespace ServiceDefaults.Diagnostics;
 
 public static class OpenTelemetryConfiguration
 {
-    public static IServiceCollection AddOpenTelemetryService(this IServiceCollection services, string serviceName, string otelEndpoint)
+    public static IServiceCollection AddOpenTelemetryService(this IServiceCollection services, IConfiguration configuration)
     {
+        var serviceName = configuration["OpenTelemetrySettings:ServiceName"]!;
+        var otelEndpoint = configuration["OpenTelemetrySettings:OtlpEndpoint"]!;
+        var metricsName = configuration["OpenTelemetrySettings:MetricsName"]!;
+        
         services.AddOpenTelemetry()
             .ConfigureResource(resource =>
             {
@@ -40,7 +45,7 @@ public static class OpenTelemetryConfiguration
                     .AddHttpClientInstrumentation()
                     .AddMeter("Microsoft.AspNetCore.Hosting")
                     .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
-                    .AddMeter(ApplicationDiagnostics.Meter.Name)
+                    .AddMeter(metricsName)
                     .AddConsoleExporter()
                     .AddOtlpExporter(options =>
                         options.Endpoint = new Uri(otelEndpoint)

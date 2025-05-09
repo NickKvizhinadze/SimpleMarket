@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using ServiceDefaults.Diagnostics;
 using Microsoft.Extensions.Hosting;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -6,10 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleMarket.Orders.Persistence.Data;
 using SimpleMarket.Orders.Persistence.Saga;
-using SimpleMarket.Orders.Saga.Diagnostics;
-using OpenTelemetry.Instrumentation.MassTransit;
-using SimpleMarket.Orders.Saga.Models;
-using SimpleMarket.Orders.Shared.Diagnostics;
 
 namespace SimpleMarket.Orders.Saga;
 
@@ -34,12 +30,14 @@ public class Program
                 
                 services.AddDbContext<OrdersDbContext>(opts =>
                     opts.UseNpgsql(hostContext.Configuration.GetConnectionString("OrdersConnectionString")));
-
-                var openTelemetrySettings = hostContext.Configuration.GetSection(nameof(OpenTelemetrySettings)).Get<OpenTelemetrySettings>();
-                services.AddOpenTelemetryService("SimpleMarket.Orders.Saga", openTelemetrySettings!.OtlpEndpoint);
+                
+                //TODO: maybe I need to add Host extension for service discovery and health check in ServiceDefaults
+                services.AddOpenTelemetryService(hostContext.Configuration);
                 
                 services.AddMassTransit(o =>
                 {
+                    var userName = hostContext.Configuration["RabbitMqSettings:UserName"]!;
+                    var password = hostContext.Configuration["RabbitMqSettings:Password"]!;
                     o.SetEntityFrameworkSagaRepositoryProvider(r =>
                     {
                         r.ExistingDbContext<OrdersDbContext>();
@@ -58,8 +56,8 @@ public class Program
                     {
                         cfg.Host("localhost", "/", h =>
                         {
-                            h.Username("guest");
-                            h.Password("guest");
+                            h.Username(userName);
+                            h.Password(password);
                         });
                         
                         cfg.ConfigureEndpoints(context);

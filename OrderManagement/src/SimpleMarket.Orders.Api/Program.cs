@@ -1,9 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using MassTransit;
-using SimpleMarket.Orders.Api.Models;
 using SimpleMarket.Orders.Api.Extensions;
 using SimpleMarket.Orders.Persistence.Data;
-using SimpleMarket.Orders.Shared.Diagnostics;
 using SimpleMarket.Orders.Application.Orders.Services;
 
 
@@ -11,38 +8,32 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
+builder.AddServiceDefaults();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-builder.Services.AddDbContext<OrdersDbContext>(opts =>
-    opts.UseNpgsql(configuration.GetConnectionString("OrdersConnectionString")));
-
-
-#region OpenTelemetry
-var openTelemetrySettings = builder.Configuration.GetSection(nameof(OpenTelemetrySettings)).Get<OpenTelemetrySettings>();
-builder.Services.AddOpenTelemetryService("SimpleMarket.Orders.Saga", openTelemetrySettings!.OtlpEndpoint);
-
-#endregion
+builder.AddNpgsqlDbContext<OrdersDbContext>("OrdersDb");
 
 #region MassTransit
 
-builder.Services.AddMassTransit(o =>
-{
-    o.AddConsumers(typeof(Program).Assembly);
-    
-    o.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.Host("localhost", "/", h =>
-        {
-            h.Username("guest");
-            h.Password("guest");
-        });
-
-        cfg.ConfigureEndpoints(context);
-    });
-});
+// builder.Services.AddMassTransit(o =>
+// {
+//     o.AddConsumers(typeof(Program).Assembly);
+//     
+//     o.UsingRabbitMq((context, cfg) =>
+//     {
+//         cfg.Host("localhost", "/", h =>
+//         {
+//             h.Username("guest");
+//             h.Password("guest");
+//         });
+//
+//         cfg.ConfigureEndpoints(context);
+//     });
+// });
 
 #endregion
 
@@ -66,5 +57,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+app.MapDefaultEndpoints();
 
 app.Run();

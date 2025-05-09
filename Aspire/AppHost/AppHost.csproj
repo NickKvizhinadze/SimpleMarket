@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Sdk Name="Aspire.AppHost.Sdk" Version="9.2.1"/>
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <UserSecretsId>fc1b2725-9059-4804-a614-5c936d971106</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.1"/>
+        <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.2.1" />
+        <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.2.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\CarrierManagement\src\SimpleMarket.Carrier.Api\SimpleMarket.Carrier.Api.csproj" />
+      <ProjectReference Include="..\..\OrderManagement\src\SimpleMarket.Orders.Api\SimpleMarket.Orders.Api.csproj" />
+      <ProjectReference Include="..\..\OrderManagement\src\SimpleMarket.Orders.Saga\SimpleMarket.Orders.Saga.csproj" />
+      <ProjectReference Include="..\..\SimpleMarket.Catalog.Api\SimpleMarket.Catalog.Api.csproj" />
+      <ProjectReference Include="..\..\SimpleMarket.Customers.Api\SimpleMarket.Customers.Api.csproj" />
+      <ProjectReference Include="..\..\SimpleMarket.Payments.Api\SimpleMarket.Payments.Api.csproj" />
+    </ItemGroup>
+
+</Project>

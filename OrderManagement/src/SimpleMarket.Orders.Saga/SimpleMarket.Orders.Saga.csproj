@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\Aspire\ServiceDefaults\ServiceDefaults.csproj" />
         <ProjectReference Include="..\SimpleMarket.Orders.Persistence\SimpleMarket.Orders.Persistence.csproj"/>
         <ProjectReference Include="..\..\..\SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj" />
         <ProjectReference Include="..\SimpleMarket.Orders.Contracts\SimpleMarket.Orders.Contracts.csproj"/>
@@ -43,5 +44,10 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
-
+    
+    <ItemGroup>
+        <None Update="Properties\launchSettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 </Project>

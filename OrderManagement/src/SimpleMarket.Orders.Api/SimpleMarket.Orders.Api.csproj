@@ -8,21 +8,22 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.2.1" />
         <PackageReference Include="AutoMapper" Version="14.0.0" />
         <PackageReference Include="Kvizhinadze.DotNetHelpers" Version="3.0.2" />
         <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.3">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -31,6 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Aspire\ServiceDefaults\ServiceDefaults.csproj" />
       <ProjectReference Include="..\..\..\SimpleMarket.Catalog.Contracts\SimpleMarket.Catalog.Contracts.csproj" />
       <ProjectReference Include="..\..\..\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj" />
       <ProjectReference Include="..\SimpleMarket.Orders.Application\SimpleMarket.Orders.Application.csproj" />
