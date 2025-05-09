@@ -7,40 +7,16 @@ using SimpleMarket.Payments.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var configuration = builder.Configuration;
+
+builder.AddServiceDefaults(typeof(Program).Assembly);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-builder.Services.AddDbContext<PaymentsDbContext>(opts =>
-    opts.UseNpgsql(configuration.GetConnectionString("PaymentsConnectionString")));
 
-#region MassTransit
-
-builder.Services.AddMassTransit(o =>
-{
-    o.AddConsumers(typeof(Program).Assembly);
-    
-    o.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.Host("localhost", "/", h =>
-        {
-            h.Username("guest");
-            h.Password("guest");
-        });
-
-        cfg.ConfigureEndpoints(context);
-    });
-});
-
-#endregion
-
-#region Open telemetry
-
-builder.AddOpenTelemetry();
-#endregion
+builder.AddNpgsqlDbContext<PaymentsDbContext>("PaymentsDb");
 
 #region Register Services
 builder.Services.AddScoped<IPaymentService, PaymentService>();
@@ -59,5 +35,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+app.MapDefaultEndpoints();
 
 app.Run();

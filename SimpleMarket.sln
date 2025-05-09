@@ -9,23 +9,35 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Catalog.Api", "SimpleMarket.Catalog.Api\SimpleMarket.Catalog.Api.csproj", "{E9CCFB70-3DB3-48E7-9B2B-1F7A36454DD6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{F249B8EF-4F9E-4F8E-BAFE-54CB4E04A471}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Api", "OrderManagement\src\SimpleMarket.Orders.Api\SimpleMarket.Orders.Api.csproj", "{FCA6D0E7-FE12-4F5F-B1DD-AFFD4CB8E2B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppHost", "Aspire\AppHost\AppHost.csproj", "{44D2DDFA-2136-45D5-B1D8-2F601BF3D5CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Catalog.Contracts", "SimpleMarket.Catalog.Contracts\SimpleMarket.Catalog.Contracts.csproj", "{2AE0E4A7-2E7A-4E17-A1B5-E6D40E701FBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefaults", "Aspire\ServiceDefaults\ServiceDefaults.csproj", "{6D4C41A4-ADB6-48CA-BD23-0547EA482621}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Payments.Api", "SimpleMarket.Payments.Api\SimpleMarket.Payments.Api.csproj", "{73103E6B-0F25-4468-9672-02A9483D9925}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{5C3943A1-3633-4E92-8A18-638B388A82AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7C93EAFB-4E13-4A55-9305-216670D75FEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Catalog.Api", "Catalog\src\SimpleMarket.Catalog.Api\SimpleMarket.Catalog.Api.csproj", "{E9CCFB70-3DB3-48E7-9B2B-1F7A36454DD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Catalog.Contracts", "Catalog\src\SimpleMarket.Catalog.Contracts\SimpleMarket.Catalog.Contracts.csproj", "{2AE0E4A7-2E7A-4E17-A1B5-E6D40E701FBC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OrderManagement", "OrderManagement", "{EFBDF63A-9842-4CC6-9A84-970D79C9A09F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{63300A1E-6FE1-4B0B-B228-EB4EBD44ADCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Api", "OrderManagement\src\SimpleMarket.Orders.Api\SimpleMarket.Orders.Api.csproj", "{FCA6D0E7-FE12-4F5F-B1DD-AFFD4CB8E2B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Saga", "OrderManagement\src\SimpleMarket.Orders.Saga\SimpleMarket.Orders.Saga.csproj", "{712CDF9F-6D48-48C2-B70C-240A58485D15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Persistence", "OrderManagement\src\SimpleMarket.Orders.Persistence\SimpleMarket.Orders.Persistence.csproj", "{4009676C-9177-4C21-8DF9-F91A62D69C23}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Domain", "OrderManagement\src\SimpleMarket.Orders.Domain\SimpleMarket.Orders.Domain.csproj", "{D56E4BFE-A11A-4B8C-9420-503FCFA16BAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Application", "OrderManagement\src\SimpleMarket.Orders.Application\SimpleMarket.Orders.Application.csproj", "{09A302D8-C610-4C1D-8F67-8DA65B7E6D5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Shared", "OrderManagement\src\SimpleMarket.Orders.Shared\SimpleMarket.Orders.Shared.csproj", "{7AF6AFD9-A4DD-4C4D-A9D0-F5454E012376}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Contracts", "OrderManagement\src\SimpleMarket.Orders.Contracts\SimpleMarket.Orders.Contracts.csproj", "{F7274F4C-EDE8-42BF-B353-0D67F6F3F375}"
 EndProject
@@ -39,18 +51,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Carrier.Domain
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Carrier.Persistence", "CarrierManagement\src\SimpleMarket.Carrier.Persistence\SimpleMarket.Carrier.Persistence.csproj", "{45156FFA-0CEA-42C8-A1C8-D9DFDD2D2691}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.SharedLibrary", "SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj", "{A9E302D1-48BC-4A84-9E15-EC1080C48F6A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Application", "OrderManagement\src\SimpleMarket.Orders.Application\SimpleMarket.Orders.Application.csproj", "{09A302D8-C610-4C1D-8F67-8DA65B7E6D5C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Shared", "OrderManagement\src\SimpleMarket.Orders.Shared\SimpleMarket.Orders.Shared.csproj", "{7AF6AFD9-A4DD-4C4D-A9D0-F5454E012376}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppHost", "Aspire\AppHost\AppHost.csproj", "{44D2DDFA-2136-45D5-B1D8-2F601BF3D5CD}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{F249B8EF-4F9E-4F8E-BAFE-54CB4E04A471}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefaults", "Aspire\ServiceDefaults\ServiceDefaults.csproj", "{6D4C41A4-ADB6-48CA-BD23-0547EA482621}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Customers", "Customers", "{A594AF24-2000-4857-8999-BB14F121013F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{336EA4DB-129D-4A52-B17A-FC8CBFAE174E}"
@@ -59,7 +59,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Customers.Api"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Customers.Contracts", "Customers\src\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj", "{898747A0-9372-4BC5-984F-1DB1740F21AC}"
 EndProject
-
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Payments", "Payments", "{474232E0-FFDC-4EDA-BB66-6E3FA5FB7E18}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9B3874BE-21EA-4DC4-991D-92A278B040A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Payments.Api", "Payments\src\SimpleMarket.Payments.Api\SimpleMarket.Payments.Api.csproj", "{73103E6B-0F25-4468-9672-02A9483D9925}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.SharedLibrary", "SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj", "{A9E302D1-48BC-4A84-9E15-EC1080C48F6A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,5 +164,10 @@ Global
 		{336EA4DB-129D-4A52-B17A-FC8CBFAE174E} = {A594AF24-2000-4857-8999-BB14F121013F}
 		{E8BB7BDA-21F1-4FC0-9547-6D2092F24F68} = {336EA4DB-129D-4A52-B17A-FC8CBFAE174E}
 		{898747A0-9372-4BC5-984F-1DB1740F21AC} = {336EA4DB-129D-4A52-B17A-FC8CBFAE174E}
+		{7C93EAFB-4E13-4A55-9305-216670D75FEB} = {5C3943A1-3633-4E92-8A18-638B388A82AC}
+		{E9CCFB70-3DB3-48E7-9B2B-1F7A36454DD6} = {7C93EAFB-4E13-4A55-9305-216670D75FEB}
+		{2AE0E4A7-2E7A-4E17-A1B5-E6D40E701FBC} = {7C93EAFB-4E13-4A55-9305-216670D75FEB}
+		{9B3874BE-21EA-4DC4-991D-92A278B040A3} = {474232E0-FFDC-4EDA-BB66-6E3FA5FB7E18}
+		{73103E6B-0F25-4468-9672-02A9483D9925} = {9B3874BE-21EA-4DC4-991D-92A278B040A3}
 	EndGlobalSection
 EndGlobal
