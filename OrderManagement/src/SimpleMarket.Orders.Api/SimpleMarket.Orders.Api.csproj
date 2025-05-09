@@ -34,7 +34,6 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\Aspire\ServiceDefaults\ServiceDefaults.csproj" />
       <ProjectReference Include="..\..\..\Customers\src\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj" />
-      <ProjectReference Include="..\..\..\SimpleMarket.Catalog.Contracts\SimpleMarket.Catalog.Contracts.csproj" />
       <ProjectReference Include="..\SimpleMarket.Orders.Application\SimpleMarket.Orders.Application.csproj" />
       <ProjectReference Include="..\SimpleMarket.Orders.Domain\SimpleMarket.Orders.Domain.csproj" />
       <ProjectReference Include="..\SimpleMarket.Orders.Persistence\SimpleMarket.Orders.Persistence.csproj" />

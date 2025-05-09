@@ -4,7 +4,7 @@ namespace SimpleMarket.Carrier.Api.Diagnostics;
 
 public static class ApplicationDiagnostics
 {
-    private const string ServiceName = "SimpleMarket.Orders.Api";
+    private const string ServiceName = "SimpleMarket.Carrier";
     public static readonly Meter Meter = new (ServiceName);
     
     public static readonly Counter<long> OrdersCreatedCounter = Meter.CreateCounter<long>("orders.created");

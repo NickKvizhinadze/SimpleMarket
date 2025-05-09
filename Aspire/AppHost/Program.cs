@@ -1,3 +1,4 @@
+// ReSharper disable UnusedVariable
 using AppHost.Constants;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -55,13 +56,13 @@ var ordersSaga = builder.AddProject<Projects.SimpleMarket_Orders_Saga>(AppHostCo
     .WaitFor(ordersApi)
     .WithExplicitStart();
 
-var paymentsApi = builder.AddProject<Projects.SimpleMarket_Catalog_Api>(AppHostConstants.ServiceNames.PaymentsApi)
+var paymentsApi = builder.AddProject<Projects.SimpleMarket_Payments_Api>(AppHostConstants.ServiceNames.PaymentsApi)
     .WithReference(paymentsDb)
     .WaitFor(paymentsDb)
     .WithReference(rabbitMqServer)
     .WaitFor(rabbitMqServer);
 
-var carrierApi = builder.AddProject<Projects.SimpleMarket_Catalog_Api>(AppHostConstants.ServiceNames.CarrierApi)
+var carrierApi = builder.AddProject<Projects.SimpleMarket_Carrier_Api>(AppHostConstants.ServiceNames.CarrierApi)
     .WithReference(carrierDb)
     .WaitFor(carrierDb)
     .WithReference(rabbitMqServer)
