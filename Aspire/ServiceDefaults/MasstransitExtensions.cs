@@ -7,14 +7,12 @@ namespace ServiceDefaults;
 
 public static class MasstransitExtensions
 {
-    public static void AddMasstransitService(this IServiceCollection services, IConfiguration configuration)
+    public static void AddMasstransitService(this IServiceCollection services, IConfiguration configuration, Assembly assembly)
     {
         services.AddMassTransit(o =>
         {
             var userName = configuration["RabbitMqSettings:UserName"]!;
             var password = configuration["RabbitMqSettings:Password"]!;
-
-            var assembly = Assembly.GetExecutingAssembly();
             
             o.AddConsumers(assembly);
     

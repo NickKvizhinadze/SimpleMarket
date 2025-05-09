@@ -1,14 +1,12 @@
-using MassTransit;
 using SimpleMarket.Orders.Api.Extensions;
+using SimpleMarket.Orders.Application;
 using SimpleMarket.Orders.Persistence.Data;
 using SimpleMarket.Orders.Application.Orders.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-var configuration = builder.Configuration;
-
-builder.AddServiceDefaults();
+builder.AddServiceDefaults(typeof(IOrdersApplicationMarker).Assembly);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

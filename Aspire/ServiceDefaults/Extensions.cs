@@ -1,3 +1,4 @@
+using System.Reflection;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -22,9 +23,9 @@ public static class Extensions
     private const string HealthEndpointPath = "/health";
     private const string AlivenessEndpointPath = "/alive";
 
-    public static TBuilder AddServiceDefaults<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
+    public static TBuilder AddServiceDefaults<TBuilder>(this TBuilder builder, Assembly assembly) where TBuilder : IHostApplicationBuilder
     {
-        builder.Services.AddMasstransitService(builder.Configuration);
+        builder.Services.AddMasstransitService(builder.Configuration, assembly);
         
         builder.ConfigureOpenTelemetry();
 

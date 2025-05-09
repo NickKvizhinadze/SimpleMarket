@@ -1,6 +1,6 @@
-﻿namespace AppHost;
+namespace AppHost.Constants;
 
-public class Constants
+public class AppHostConstants
 {
     public class ServiceNames
     {
@@ -17,5 +17,13 @@ public class Constants
     public class DatabaseNames
     {
         public const string OrdersDb = "OrdersDb";
+        public const string CustomersDb = "CustomersDb";
     }
-}
+
+    public class Volumes
+    {
+        public const string Postgres = "postgres-data";
+        public const string RabbitMq = "rabbitmq-data";
+        
+    }
+} 

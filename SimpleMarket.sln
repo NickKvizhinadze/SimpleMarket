@@ -11,15 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Catalog.Api", "SimpleMarket.Catalog.Api\SimpleMarket.Catalog.Api.csproj", "{E9CCFB70-3DB3-48E7-9B2B-1F7A36454DD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Customers.Api", "SimpleMarket.Customers.Api\SimpleMarket.Customers.Api.csproj", "{E8BB7BDA-21F1-4FC0-9547-6D2092F24F68}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Orders.Api", "OrderManagement\src\SimpleMarket.Orders.Api\SimpleMarket.Orders.Api.csproj", "{FCA6D0E7-FE12-4F5F-B1DD-AFFD4CB8E2B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Catalog.Contracts", "SimpleMarket.Catalog.Contracts\SimpleMarket.Catalog.Contracts.csproj", "{2AE0E4A7-2E7A-4E17-A1B5-E6D40E701FBC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Payments.Api", "SimpleMarket.Payments.Api\SimpleMarket.Payments.Api.csproj", "{73103E6B-0F25-4468-9672-02A9483D9925}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Customers.Contracts", "SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj", "{898747A0-9372-4BC5-984F-1DB1740F21AC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OrderManagement", "OrderManagement", "{EFBDF63A-9842-4CC6-9A84-970D79C9A09F}"
 EndProject
@@ -41,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Carrier.Api", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Carrier.Domain", "CarrierManagement\src\SimpleMarket.Carrier.Domain\SimpleMarket.Carrier.Domain.csproj", "{FC31A497-4D36-47AE-BEB9-454E74724870}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Carrier.Persistence", "SimpleMarket.Carrier.Persistence\SimpleMarket.Carrier.Persistence.csproj", "{45156FFA-0CEA-42C8-A1C8-D9DFDD2D2691}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Carrier.Persistence", "CarrierManagement\src\SimpleMarket.Carrier.Persistence\SimpleMarket.Carrier.Persistence.csproj", "{45156FFA-0CEA-42C8-A1C8-D9DFDD2D2691}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.SharedLibrary", "SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj", "{A9E302D1-48BC-4A84-9E15-EC1080C48F6A}"
 EndProject
@@ -55,6 +51,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{F249B8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefaults", "Aspire\ServiceDefaults\ServiceDefaults.csproj", "{6D4C41A4-ADB6-48CA-BD23-0547EA482621}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Customers", "Customers", "{A594AF24-2000-4857-8999-BB14F121013F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{336EA4DB-129D-4A52-B17A-FC8CBFAE174E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Customers.Api", "Customers\src\SimpleMarket.Customers.Api\SimpleMarket.Customers.Api.csproj", "{E8BB7BDA-21F1-4FC0-9547-6D2092F24F68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Customers.Contracts", "Customers\src\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj", "{898747A0-9372-4BC5-984F-1DB1740F21AC}"
+EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,5 +154,8 @@ Global
 		{7AF6AFD9-A4DD-4C4D-A9D0-F5454E012376} = {63300A1E-6FE1-4B0B-B228-EB4EBD44ADCF}
 		{44D2DDFA-2136-45D5-B1D8-2F601BF3D5CD} = {F249B8EF-4F9E-4F8E-BAFE-54CB4E04A471}
 		{6D4C41A4-ADB6-48CA-BD23-0547EA482621} = {F249B8EF-4F9E-4F8E-BAFE-54CB4E04A471}
+		{336EA4DB-129D-4A52-B17A-FC8CBFAE174E} = {A594AF24-2000-4857-8999-BB14F121013F}
+		{E8BB7BDA-21F1-4FC0-9547-6D2092F24F68} = {336EA4DB-129D-4A52-B17A-FC8CBFAE174E}
+		{898747A0-9372-4BC5-984F-1DB1740F21AC} = {336EA4DB-129D-4A52-B17A-FC8CBFAE174E}
 	EndGlobalSection
 EndGlobal

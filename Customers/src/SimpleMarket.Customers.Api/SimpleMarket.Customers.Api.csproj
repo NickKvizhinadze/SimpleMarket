@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.2.1" />
         <PackageReference Include="AutoMapper" Version="14.0.0" />
         <PackageReference Include="Kvizhinadze.DotNetHelpers" Version="3.0.2" />
         <PackageReference Include="MassTransit.RabbitMQ" Version="8.4.0" />
@@ -41,6 +42,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Aspire\ServiceDefaults\ServiceDefaults.csproj" />
       <ProjectReference Include="..\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj" />
     </ItemGroup>
 

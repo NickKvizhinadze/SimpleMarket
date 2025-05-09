@@ -38,8 +38,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Customers\src\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj" />
       <ProjectReference Include="..\OrderManagement\src\SimpleMarket.Orders.Contracts\SimpleMarket.Orders.Contracts.csproj" />
-      <ProjectReference Include="..\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj" />
       <ProjectReference Include="..\SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj" />
     </ItemGroup>
 

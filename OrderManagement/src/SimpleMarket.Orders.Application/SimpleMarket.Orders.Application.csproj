@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Customers\src\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj" />
       <ProjectReference Include="..\..\..\SimpleMarket.Catalog.Contracts\SimpleMarket.Catalog.Contracts.csproj" />
-      <ProjectReference Include="..\..\..\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj" />
       <ProjectReference Include="..\..\..\SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj" />
       <ProjectReference Include="..\SimpleMarket.Orders.Contracts\SimpleMarket.Orders.Contracts.csproj" />
       <ProjectReference Include="..\SimpleMarket.Orders.Domain\SimpleMarket.Orders.Domain.csproj" />

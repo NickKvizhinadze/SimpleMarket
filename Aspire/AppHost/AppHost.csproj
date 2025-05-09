@@ -21,8 +21,9 @@
       <ProjectReference Include="..\..\OrderManagement\src\SimpleMarket.Orders.Api\SimpleMarket.Orders.Api.csproj" />
       <ProjectReference Include="..\..\OrderManagement\src\SimpleMarket.Orders.Saga\SimpleMarket.Orders.Saga.csproj" />
       <ProjectReference Include="..\..\SimpleMarket.Catalog.Api\SimpleMarket.Catalog.Api.csproj" />
-      <ProjectReference Include="..\..\SimpleMarket.Customers.Api\SimpleMarket.Customers.Api.csproj" />
+      <ProjectReference Include="..\..\Customers\src\SimpleMarket.Customers.Api\SimpleMarket.Customers.Api.csproj" />
       <ProjectReference Include="..\..\SimpleMarket.Payments.Api\SimpleMarket.Payments.Api.csproj" />
+      <ProjectReference Include="..\..\SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj" />
     </ItemGroup>
 
 </Project>
