@@ -14,7 +14,7 @@ public static class OpenTelemetryConfiguration
     public static IServiceCollection AddOpenTelemetryService(this IServiceCollection services, IConfiguration configuration)
     {
         var serviceName = configuration["OpenTelemetrySettings:ServiceName"]!;
-        var otelEndpoint = configuration["OpenTelemetrySettings:OtlpEndpoint"]!;
+        var otelEndpoint = configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]!;
         var metricsName = configuration["OpenTelemetrySettings:MetricsName"]!;
         
         services.AddOpenTelemetry()
