@@ -12,7 +12,8 @@ var postgresServer = builder.AddPostgres(
         userName: postgresUser,
         password: postgresPassword,
         port: 5434)
-    .WithDataVolume(AppHostConstants.Volumes.Postgres);
+    .WithDataVolume(AppHostConstants.Volumes.Postgres)
+    .WithLifetime(ContainerLifetime.Persistent);
 
 var ordersDb = postgresServer.AddDatabase(AppHostConstants.DatabaseNames.OrdersDb);
 var customersDb = postgresServer.AddDatabase(AppHostConstants.DatabaseNames.CustomersDb);
@@ -70,6 +71,21 @@ var carrierApi = builder.AddProject<Projects.SimpleMarket_Carrier_Api>(AppHostCo
 //
 // var carrierApi = builder.AddProject<Projects.SimpleMarket_Carrier_Api>("carrier-api");
 //
+
+
+var frontend = builder.AddNpmApp("frontend", "../../SimpleMarket.FrontEnd.Client", scriptName: "dev")
+    .WithReference(catalogApi)
+    .WithReference(customersApi)
+    .WithReference(ordersApi)
+    .WithReference(paymentsApi)
+    .WaitFor(catalogApi)
+    .WaitFor(customersApi)
+    .WaitFor(ordersApi)
+    .WaitFor(paymentsApi)
+    .WithHttpEndpoint(env: "PORT")
+    .WithExternalHttpEndpoints()
+    .PublishAsDockerFile();
+    
 
 
 builder.Build().Run();
