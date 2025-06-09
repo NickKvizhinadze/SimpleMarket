@@ -9,7 +9,9 @@ public class AppHostConstants
         public const string CatalogApi = "catalog-api";
         public const string CustomersApi = "customers-api";
         public const string PaymentsApi = "payments-api";
+        [Obsolete]
         public const string CarrierApi = "carrier-api";
+        public const string CarrierGrpc = "carrier-grpc";
     }
     
     public class IntegrationServiceNames

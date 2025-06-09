@@ -10,7 +10,6 @@ public class Order
     public DateTime? UpdateDate { get; set; }
     
     public decimal ShippingAmount { get; set; }
-    public PaymentMethod PaymentMethod { get; set; }
     public OrderState State { get; set; }
     
     public ICollection<OrderItem>? Items { get; set; }

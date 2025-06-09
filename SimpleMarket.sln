@@ -70,6 +70,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Payments.Api",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.SharedLibrary", "SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj", "{A9E302D1-48BC-4A84-9E15-EC1080C48F6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Carrier.Grpc", "CarrierManagement\src\SimpleMarket.Carrier.Grpc\SimpleMarket.Carrier.Grpc.csproj", "{FF6BFD34-BC28-40BC-922B-ADFD0D816172}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMarket.Carrier.Application", "CarrierManagement\src\SimpleMarket.Carrier.Application\SimpleMarket.Carrier.Application.csproj", "{3E2796AF-5D5D-4400-948F-AF7A261B8A61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -152,6 +156,14 @@ Global
 		{C1D2E3F4-5A6B-7C8D-9E0F-1A2B3C4D5E6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1D2E3F4-5A6B-7C8D-9E0F-1A2B3C4D5E6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1D2E3F4-5A6B-7C8D-9E0F-1A2B3C4D5E6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF6BFD34-BC28-40BC-922B-ADFD0D816172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF6BFD34-BC28-40BC-922B-ADFD0D816172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF6BFD34-BC28-40BC-922B-ADFD0D816172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF6BFD34-BC28-40BC-922B-ADFD0D816172}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E2796AF-5D5D-4400-948F-AF7A261B8A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E2796AF-5D5D-4400-948F-AF7A261B8A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E2796AF-5D5D-4400-948F-AF7A261B8A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E2796AF-5D5D-4400-948F-AF7A261B8A61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{63300A1E-6FE1-4B0B-B228-EB4EBD44ADCF} = {EFBDF63A-9842-4CC6-9A84-970D79C9A09F}
@@ -177,5 +189,7 @@ Global
 		{9B3874BE-21EA-4DC4-991D-92A278B040A3} = {474232E0-FFDC-4EDA-BB66-6E3FA5FB7E18}
 		{73103E6B-0F25-4468-9672-02A9483D9925} = {9B3874BE-21EA-4DC4-991D-92A278B040A3}
 		{C1D2E3F4-5A6B-7C8D-9E0F-1A2B3C4D5E6F} = {B1E5F8A2-3D4E-4F9C-9A1B-8C7D6E5F4A3B}
+		{FF6BFD34-BC28-40BC-922B-ADFD0D816172} = {38A30B02-0F33-482D-B7F5-7FCC860B1287}
+		{3E2796AF-5D5D-4400-948F-AF7A261B8A61} = {38A30B02-0F33-482D-B7F5-7FCC860B1287}
 	EndGlobalSection
 EndGlobal

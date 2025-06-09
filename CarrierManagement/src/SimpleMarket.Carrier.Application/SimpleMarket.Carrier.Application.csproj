@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SimpleMarket.Carrier.Domain\SimpleMarket.Carrier.Domain.csproj" />
+      <ProjectReference Include="..\SimpleMarket.Carrier.Persistence\SimpleMarket.Carrier.Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Kvizhinadze.DotNetHelpers" Version="3.0.2" />
+    </ItemGroup>
+
+</Project>

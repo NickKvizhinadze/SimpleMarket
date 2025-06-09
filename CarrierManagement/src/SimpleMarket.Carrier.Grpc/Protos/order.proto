@@ -1,0 +1,39 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "SimpleMarket.Carrier.Grpc.Orders";
+package order;
+
+import "google/protobuf/wrappers.proto";
+import "Common/result.proto";
+
+message CreateOrderRequest{
+  string OrderId = 1;
+  string ShippingAddress = 2;
+  string CustomerId = 3;
+  double ShippingAmount = 4;
+  double Amount = 5;
+  PaymentMethodType PaymentMethod = 6;
+  repeated OrderItem OrderItems = 7;
+
+  enum PaymentMethodType {
+    Unknown = 0;
+    BogCard = 1;
+    BogLoyaltyBogCard = 2;
+    BogInstallment = 3;
+    Invoice = 4;
+  }
+
+  message OrderItem{
+    string ProductId = 1;
+    int32 Quantity = 2;
+  }
+  
+  message CreateOrderResponse {
+    string OrderId = 1;
+  }
+}
+
+service OrderServiceDefinition{
+  rpc Create(CreateOrderRequest) returns (common.Result);
+}
+

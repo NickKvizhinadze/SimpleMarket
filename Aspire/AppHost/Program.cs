@@ -46,9 +46,17 @@ var customersApi = builder.AddProject<Projects.SimpleMarket_Customers_Api>(AppHo
     .WithReference(rabbitMqServer)
     .WaitFor(rabbitMqServer);
 
+var carrierGrpc = builder.AddProject<Projects.SimpleMarket_Carrier_Grpc>(AppHostConstants.ServiceNames.CarrierGrpc)
+    .WithReference(carrierDb)
+    .WaitFor(carrierDb)
+    .WithReference(rabbitMqServer)
+    .WaitFor(rabbitMqServer);
+
 var ordersApi = builder.AddProject<Projects.SimpleMarket_Orders_Api>(AppHostConstants.ServiceNames.OrdersApi)
     .WithReference(ordersDb)
     .WaitFor(ordersDb)
+    .WaitFor(carrierGrpc)
+    .WithReference(carrierGrpc)
     .WithReference(rabbitMqServer)
     .WaitFor(rabbitMqServer);
 
@@ -63,14 +71,11 @@ var paymentsApi = builder.AddProject<Projects.SimpleMarket_Payments_Api>(AppHost
     .WithReference(rabbitMqServer)
     .WaitFor(rabbitMqServer);
 
-var carrierApi = builder.AddProject<Projects.SimpleMarket_Carrier_Api>(AppHostConstants.ServiceNames.CarrierApi)
-    .WithReference(carrierDb)
-    .WaitFor(carrierDb)
-    .WithReference(rabbitMqServer)
-    .WaitFor(rabbitMqServer);
-//
-// var carrierApi = builder.AddProject<Projects.SimpleMarket_Carrier_Api>("carrier-api");
-//
+// var carrierApi = builder.AddProject<Projects.SimpleMarket_Carrier_Api>(AppHostConstants.ServiceNames.CarrierApi)
+//     .WithReference(carrierDb)
+//     .WaitFor(carrierDb)
+//     .WithReference(rabbitMqServer)
+//     .WaitFor(rabbitMqServer);
 
 
 var frontend = builder.AddNpmApp("frontend", "../../SimpleMarket.FrontEnd.Client", scriptName: "dev")
