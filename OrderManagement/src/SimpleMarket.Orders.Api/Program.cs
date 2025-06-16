@@ -2,6 +2,7 @@ using SimpleMarket.Orders.Api.Extensions;
 using SimpleMarket.Orders.Application;
 using SimpleMarket.Orders.Persistence.Data;
 using SimpleMarket.Orders.Application.Orders.Services;
+using SimpleMarket.Orders.Application.Infrastructure.Services.Carrier;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,6 +39,9 @@ builder.AddNpgsqlDbContext<OrdersDbContext>("OrdersDb");
 #region Register Services
 
 builder.Services.AddScoped<IOrdersService, OrdersService>();
+builder.Services.AddScoped<ICarrierClient, CarrierClient>();
+builder.AddCarrierGrpcService();
+
 
 #endregion
 

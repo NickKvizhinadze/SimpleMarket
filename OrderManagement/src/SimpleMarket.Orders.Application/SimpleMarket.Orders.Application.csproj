@@ -7,21 +7,33 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Catalog\src\SimpleMarket.Catalog.Contracts\SimpleMarket.Catalog.Contracts.csproj" />
-      <ProjectReference Include="..\..\..\Customers\src\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj" />
-      <ProjectReference Include="..\..\..\SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj" />
-      <ProjectReference Include="..\SimpleMarket.Orders.Contracts\SimpleMarket.Orders.Contracts.csproj" />
-      <ProjectReference Include="..\SimpleMarket.Orders.Domain\SimpleMarket.Orders.Domain.csproj" />
-      <ProjectReference Include="..\SimpleMarket.Orders.Persistence\SimpleMarket.Orders.Persistence.csproj" />
-      <ProjectReference Include="..\SimpleMarket.Orders.Shared\SimpleMarket.Orders.Shared.csproj" />
+        <ProjectReference Include="..\..\..\Catalog\src\SimpleMarket.Catalog.Contracts\SimpleMarket.Catalog.Contracts.csproj"/>
+        <ProjectReference Include="..\..\..\Customers\src\SimpleMarket.Customers.Contracts\SimpleMarket.Customers.Contracts.csproj"/>
+        <ProjectReference Include="..\..\..\SimpleMarket.SharedLibrary\SimpleMarket.SharedLibrary.csproj"/>
+        <ProjectReference Include="..\SimpleMarket.Orders.Contracts\SimpleMarket.Orders.Contracts.csproj"/>
+        <ProjectReference Include="..\SimpleMarket.Orders.Domain\SimpleMarket.Orders.Domain.csproj"/>
+        <ProjectReference Include="..\SimpleMarket.Orders.Persistence\SimpleMarket.Orders.Persistence.csproj"/>
+        <ProjectReference Include="..\SimpleMarket.Orders.Shared\SimpleMarket.Orders.Shared.csproj"/>
+        <PackageReference Include="Grpc.AspNetCore" Version="2.49.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Kvizhinadze.DotNetHelpers" Version="3.0.2" />
+        <PackageReference Include="Grpc.Net.Client" Version="2.71.0"/>
+        <PackageReference Include="Kvizhinadze.DotNetHelpers" Version="3.0.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Common\" />
+        <Folder Include="Common\"/>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <Protobuf Include="..\..\..\CarrierManagement\src\SimpleMarket.Carrier.Grpc\Protos\order.proto" GrpcServices="Client">
+            <Link>Protos\order.proto</Link>
+        </Protobuf>
+        <Protobuf Include="..\..\..\CarrierManagement\src\SimpleMarket.Carrier.Grpc\Protos\Common\result.proto" GrpcServices="Client">
+            <Link>Protos\result.proto</Link>
+        </Protobuf>
     </ItemGroup>
 
 </Project>

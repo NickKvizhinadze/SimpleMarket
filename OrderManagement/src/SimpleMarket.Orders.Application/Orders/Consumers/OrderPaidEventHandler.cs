@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using MassTransit;
 using Microsoft.Extensions.Logging;
+using SimpleMarket.Orders.Application.Infrastructure.Services.Carrier;
 using SimpleMarket.Orders.Contracts;
 using SimpleMarket.Orders.Domain.Entities;
 using SimpleMarket.Orders.Persistence.Data;
@@ -12,13 +13,15 @@ public class OrderPaidEventHandler : IConsumer<OrderPaidEvent>
     private readonly ILogger<OrderPaidEventHandler> _logger;
     private readonly OrdersDbContext _dbContext;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly ICarrierClient _carrierClient;
 
     public OrderPaidEventHandler(ILogger<OrderPaidEventHandler> logger, IPublishEndpoint publishEndpoint,
-        OrdersDbContext dbContext)
+        OrdersDbContext dbContext, ICarrierClient carrierClient)
     {
         _logger = logger;
         _publishEndpoint = publishEndpoint;
         _dbContext = dbContext;
+        _carrierClient = carrierClient;
     }
 
     public async Task Consume(ConsumeContext<OrderPaidEvent> context)
@@ -33,6 +36,7 @@ public class OrderPaidEventHandler : IConsumer<OrderPaidEvent>
         order.State = OrderState.Purchased;
         await _dbContext.SaveChangesAsync();
 
+        await _carrierClient.CreateOrder(order);
         await _publishEndpoint.Publish(new OrderPaid
         {
             OrderId = context.Message.CorrelationId
